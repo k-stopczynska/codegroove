@@ -1,16 +1,50 @@
 import * as vscode from 'vscode';
+import { v4 } from 'uuid';
 
 export class CodeTimer {
 	// TODO: initialize timer on vscode run
 	init() {
 		this.statusBar.show();
-		this.statusBar.text = 'CodeGroove in session';
+		this.statusBar.text = `CodeGroove in session`;
 	}
 	// TODO: create status bar
 	statusBar = vscode.window.createStatusBarItem(
 		vscode.StatusBarAlignment.Left,
 	);
 	// TODO: get current session (project, language, id)
+
+	getCurrentSession() {
+		const project = this.getCurrentProject();
+		const language = this.getCurrentLanguage();
+		const id = this.getSessionId();
+		return { project, language, id };
+	}
+
+	getCurrentProject() {
+		const folders = vscode.workspace.workspaceFolders;
+		if (folders) {
+			const project = folders[0].name;
+			return project;
+		} else {
+			return 'No workspace folder opened';
+		}
+	}
+
+	getCurrentLanguage() {
+		const editor = vscode.window.activeTextEditor;
+		if (editor) {
+			const language = editor.document.languageId;
+			return language;
+		} else {
+			return 'No active editor detected';
+		}
+	}
+
+	getSessionId() {
+		const sessionId = v4();
+		return sessionId;
+	}
+
 	// TODO: get current session time
 	// TODO: update daily and total coding time
 	// TODO: display current session time in status bar

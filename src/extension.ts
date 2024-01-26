@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 import { CodeTimer } from './CodeTimer';
 
 export function activate(context: vscode.ExtensionContext) {
-
 	const codeTimer = new CodeTimer();
 	codeTimer.init();
 
