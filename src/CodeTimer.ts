@@ -2,17 +2,17 @@ import * as vscode from 'vscode';
 import { v4 } from 'uuid';
 
 export class CodeTimer {
-	// TODO: initialize timer on vscode run
+
 	init() {
-        this.statusBar.show();
-        const start = this.getCurrentSessionTime()
-		this.statusBar.text = `CodeGroove time: ${start}`;
-	}
-	// TODO: create status bar
+		const timer = setInterval(() => this.updateStatusBar(), 1000);
+    }
+    
+	start = this.getCurrentSessionTime();
+
 	statusBar = vscode.window.createStatusBarItem(
 		vscode.StatusBarAlignment.Left,
 	);
-	// TODO: get current session (project, language, id)
+
 	getCurrentSession() {
 		const project = this.getCurrentProject();
 		const language = this.getCurrentLanguage();
@@ -45,22 +45,37 @@ export class CodeTimer {
 		return sessionId;
 	}
 
-    // TODO: get current session time
-    getCurrentSessionTime() {
-        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        const date = new Date();
-        const startTime = date.toLocaleString('en-US', {timeZone: timeZone});
-        return startTime
-    }
+	getCurrentSessionTime() {
+		const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+		const date = new Date();
+		const startTime = date.toLocaleString('en-US', { timeZone: timeZone });
+		return startTime;
+	}
 
-	// TODO: update daily and total coding time
-	// TODO: display current session time in status bar
+	getSessionDuration() {
+		const startTime = new Date(this.start).getTime();
+		const currentTime = new Date().getTime();
+		const diff = currentTime - startTime;
+		const seconds = Math.floor(diff / 1000);
+		const minutes = Math.floor(seconds / 60);
+		const hours = Math.floor(minutes / 60);
+		return { hours, minutes, seconds };
+	}
+
+	updateStatusBar() {
+		const timeElapsed = this.getSessionDuration();
+		this.statusBar.text = `CodeGroove elapsed: ${timeElapsed.hours}: ${
+			timeElapsed.minutes % 60
+		}: ${timeElapsed.seconds % 60}`;
+		this.statusBar.show();
+	}
 	// TODO: create UI for status bar | decide what should be displayed (total for today and for project we are currently working on?)
 	// TODO: react on active window change
 	// TODO: react on no activity
 	// TODO: react on keystrokes
 	// TODO: react on switching project
 	// TODO: add listeners to events above
+	// TODO: update daily and total coding time
 	// TODO: dispose status bar and timer
 	dispose() {
 		this.statusBar.dispose();
