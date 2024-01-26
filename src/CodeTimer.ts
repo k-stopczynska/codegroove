@@ -4,15 +4,15 @@ import { v4 } from 'uuid';
 export class CodeTimer {
 	// TODO: initialize timer on vscode run
 	init() {
-		this.statusBar.show();
-		this.statusBar.text = `CodeGroove in session`;
+        this.statusBar.show();
+        const start = this.getCurrentSessionTime()
+		this.statusBar.text = `CodeGroove time: ${start}`;
 	}
 	// TODO: create status bar
 	statusBar = vscode.window.createStatusBarItem(
 		vscode.StatusBarAlignment.Left,
 	);
 	// TODO: get current session (project, language, id)
-
 	getCurrentSession() {
 		const project = this.getCurrentProject();
 		const language = this.getCurrentLanguage();
@@ -45,7 +45,14 @@ export class CodeTimer {
 		return sessionId;
 	}
 
-	// TODO: get current session time
+    // TODO: get current session time
+    getCurrentSessionTime() {
+        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        const date = new Date();
+        const startTime = date.toLocaleString('en-US', {timeZone: timeZone});
+        return startTime
+    }
+
 	// TODO: update daily and total coding time
 	// TODO: display current session time in status bar
 	// TODO: create UI for status bar | decide what should be displayed (total for today and for project we are currently working on?)
