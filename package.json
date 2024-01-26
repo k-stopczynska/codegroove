@@ -14,8 +14,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "codegroove.helloWorld",
-        "title": "Hello World"
+        "command": "codegroove.runCodegroove",
+        "title": "run codegroove"
       }
     ]
   },
