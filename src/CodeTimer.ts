@@ -8,6 +8,10 @@ export class CodeTimer {
 		vscode.StatusBarAlignment.Left,
 	);
 
+	project = '';
+
+	lang = '';
+
 	init() {
 		const timer = setInterval(() => this.updateStatusBar(), 1000);
 		this.onProjectChange = this.onProjectChange.bind(this);
@@ -22,7 +26,7 @@ export class CodeTimer {
 		return { project, language, id };
 	}
 
-	getCurrentProject = () => {
+	getCurrentProject() {
 		const folders = vscode.workspace.workspaceFolders;
 		if (folders) {
 			const project = folders[0].name;
@@ -30,7 +34,11 @@ export class CodeTimer {
 		} else {
 			return 'No workspace folder opened';
 		}
-	};
+	}
+
+	setCurrentProject(project: string) {
+		this.project = project;
+	}
 
 	getCurrentLanguage() {
 		const editor = vscode.window.activeTextEditor;
@@ -40,6 +48,10 @@ export class CodeTimer {
 		} else {
 			return 'No active editor detected';
 		}
+	}
+
+	setCurrentLanguage(language: string) {
+		this.lang = language;
 	}
 
 	getSessionId() {
@@ -74,12 +86,23 @@ export class CodeTimer {
 
 	onProjectChange(event: any) {
 		if (event.focused && event.active) {
-			console.log('Root folder changed:', this.getCurrentProject());
+			const currProj = this.getCurrentProject();
+			if (currProj !== this.project) {
+				this.setCurrentProject(currProj);
+				console.log(this.project);
+			}
 		}
 	}
 
 	onLangChange() {
-		console.log('Language changed:', this.getCurrentLanguage());
+		const currLang = this.getCurrentLanguage();
+		if (
+			currLang !== 'No active editor detected' &&
+			currLang !== this.lang
+		) {
+			this.setCurrentLanguage(currLang);
+			console.log(this.lang);
+		}
 	}
 
 	addEventListeners() {
