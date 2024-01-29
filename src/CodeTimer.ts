@@ -11,6 +11,7 @@ export class CodeTimer {
 	init() {
 		const timer = setInterval(() => this.updateStatusBar(), 1000);
 		this.onProjectChange = this.onProjectChange.bind(this);
+		this.onLangChange = this.onLangChange.bind(this);
 		this.addEventListeners();
 	}
 
@@ -72,18 +73,18 @@ export class CodeTimer {
 	}
 
 	onProjectChange(event: any) {
-		console.log('Root folder changed:', event);
 		if (event.focused && event.active) {
-			console.log(this.getCurrentProject());
+			console.log('Root folder changed:', this.getCurrentProject());
 		}
 	}
 
-	addEventListeners() {
-		// vscode.window.onDidChangeActiveTextEditor(this.onChange);
-		vscode.window.onDidChangeWindowState(this.onProjectChange);
+	onLangChange() {
+		console.log('Language changed:', this.getCurrentLanguage());
+	}
 
-		// listener for root folder e.g. project change
-		// vscode.workspace.onDidChangeWorkspaceFolders(this.onProjectChange);
+	addEventListeners() {
+		vscode.window.onDidChangeActiveTextEditor(this.onLangChange);
+		vscode.window.onDidChangeWindowState(this.onProjectChange);
 	}
 	// TODO: update daily and total coding time
 	// TODO: create UI with charts as a dashboard
