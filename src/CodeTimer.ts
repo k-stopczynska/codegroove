@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { v4 } from 'uuid';
 
 export class CodeTimer {
-	start = this.getCurrentSessionTime();
+	start = '';
 
 	statusBar = vscode.window.createStatusBarItem(
 		vscode.StatusBarAlignment.Left,
@@ -14,16 +14,26 @@ export class CodeTimer {
 
 	init() {
 		const timer = setInterval(() => this.updateStatusBar(), 1000);
+		this.setCurrentLanguage(this.getCurrentLanguage());
+		this.setCurrentProject(this.getCurrentProject());
+		this.setCurrentSession();
 		this.onProjectChange = this.onProjectChange.bind(this);
 		this.onLangChange = this.onLangChange.bind(this);
 		this.addEventListeners();
 	}
 
-	getCurrentSession() {
-		const project = this.getCurrentProject();
-		const language = this.getCurrentLanguage();
+	setCurrentSession() {
+		const project = this.project;
+		const language = this.lang;
 		const id = this.getSessionId();
+		this.setStart(this.getCurrentSessionTime());
+		const duration = this.getSessionDuration();
+		console.log(project, language, this.start, duration);
 		return { project, language, id };
+	}
+
+	setStart(start: string) {
+		this.start = start;
 	}
 
 	getCurrentProject() {
@@ -89,7 +99,7 @@ export class CodeTimer {
 			const currProj = this.getCurrentProject();
 			if (currProj !== this.project) {
 				this.setCurrentProject(currProj);
-				console.log(this.project);
+				this.setCurrentSession();
 			}
 		}
 	}
@@ -101,7 +111,7 @@ export class CodeTimer {
 			currLang !== this.lang
 		) {
 			this.setCurrentLanguage(currLang);
-			console.log(this.lang);
+			this.setCurrentSession();
 		}
 	}
 
