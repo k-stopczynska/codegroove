@@ -1,8 +1,9 @@
 import * as vscode from 'vscode';
 import { CodeTimer } from './CodeTimer';
 
+const codeTimer = new CodeTimer();
+
 export function activate(context: vscode.ExtensionContext) {
-	const codeTimer = new CodeTimer();
 	codeTimer.init();
 
 	let disposable = vscode.commands.registerCommand(
@@ -15,4 +16,6 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(disposable);
 }
 
-export function deactivate() {}
+export function deactivate() {
+	codeTimer.dispose();
+}

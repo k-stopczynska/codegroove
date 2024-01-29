@@ -2,16 +2,17 @@ import * as vscode from 'vscode';
 import { v4 } from 'uuid';
 
 export class CodeTimer {
-
-	init() {
-		const timer = setInterval(() => this.updateStatusBar(), 1000);
-    }
-    
 	start = this.getCurrentSessionTime();
 
 	statusBar = vscode.window.createStatusBarItem(
 		vscode.StatusBarAlignment.Left,
 	);
+
+	init() {
+		const timer = setInterval(() => this.updateStatusBar(), 1000);
+		this.onProjectChange = this.onProjectChange.bind(this);
+		this.addEventListeners();
+	}
 
 	getCurrentSession() {
 		const project = this.getCurrentProject();
@@ -20,7 +21,7 @@ export class CodeTimer {
 		return { project, language, id };
 	}
 
-	getCurrentProject() {
+	getCurrentProject = () => {
 		const folders = vscode.workspace.workspaceFolders;
 		if (folders) {
 			const project = folders[0].name;
@@ -28,7 +29,7 @@ export class CodeTimer {
 		} else {
 			return 'No workspace folder opened';
 		}
-	}
+	};
 
 	getCurrentLanguage() {
 		const editor = vscode.window.activeTextEditor;
@@ -69,14 +70,24 @@ export class CodeTimer {
 		}: ${timeElapsed.seconds % 60}`;
 		this.statusBar.show();
 	}
-	// TODO: create UI for status bar | decide what should be displayed (total for today and for project we are currently working on?)
-	// TODO: react on active window change
-	// TODO: react on no activity
-	// TODO: react on keystrokes
-	// TODO: react on switching project
-	// TODO: add listeners to events above
+
+	onProjectChange(event: any) {
+		console.log('Root folder changed:', event);
+		if (event.focused && event.active) {
+			console.log(this.getCurrentProject());
+		}
+	}
+
+	addEventListeners() {
+		// vscode.window.onDidChangeActiveTextEditor(this.onChange);
+		vscode.window.onDidChangeWindowState(this.onProjectChange);
+
+		// listener for root folder e.g. project change
+		// vscode.workspace.onDidChangeWorkspaceFolders(this.onProjectChange);
+	}
 	// TODO: update daily and total coding time
-	// TODO: dispose status bar and timer
+	// TODO: create UI with charts as a dashboard
+
 	dispose() {
 		this.statusBar.dispose();
 	}
