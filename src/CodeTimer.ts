@@ -1,6 +1,13 @@
 import * as vscode from 'vscode';
 import { v4 } from 'uuid';
 
+type Session = {
+	project: string;
+	language: string;
+	id: string;
+	duration: string;
+};
+
 export class CodeTimer {
 	start = '';
 
@@ -12,7 +19,14 @@ export class CodeTimer {
 
 	lang = '';
 
+	id = '';
+
+	duration = '';
+
+	sessions: Session[] = [];
+
 	init() {
+		
 		const timer = setInterval(() => this.updateStatusBar(), 1000);
 		this.setCurrentLanguage(this.getCurrentLanguage());
 		this.setCurrentProject(this.getCurrentProject());
@@ -22,14 +36,38 @@ export class CodeTimer {
 		this.addEventListeners();
 	}
 
+	setSessionId(sessionId: string) {
+		this.id = sessionId;
+	}
+
+	setDuration(duration: any) {
+		this.duration = duration;
+	}
+
 	setCurrentSession() {
 		const project = this.project;
 		const language = this.lang;
-		const id = this.getSessionId();
+		this.setSessionId(this.getSessionId());
 		this.setStart(this.getCurrentSessionTime());
-		const duration = this.getSessionDuration();
-		console.log(project, language, this.start, duration);
-		return { project, language, id };
+		return { project, language };
+	}
+
+	savePreviousSession() {
+		this.setDuration(this.getSessionDuration())
+		console.log({
+			project: this.project,
+			language: this.lang,
+			id: this.id,
+			duration: this.duration,
+		});
+		const prevSession = {
+			project: this.project,
+			language: this.lang,
+			id: this.id,
+			duration: this.duration,
+		};
+		this.sessions.push(prevSession);
+		console.log(this.sessions);
 	}
 
 	setStart(start: string) {
@@ -95,6 +133,7 @@ export class CodeTimer {
 	}
 
 	onProjectChange(event: any) {
+		this.savePreviousSession();
 		if (event.focused && event.active) {
 			const currProj = this.getCurrentProject();
 			if (currProj !== this.project) {
@@ -105,6 +144,7 @@ export class CodeTimer {
 	}
 
 	onLangChange() {
+		this.savePreviousSession();
 		const currLang = this.getCurrentLanguage();
 		if (
 			currLang !== 'No active editor detected' &&
