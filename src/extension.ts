@@ -9,7 +9,7 @@ export function activate(context: vscode.ExtensionContext) {
 	const fileOperator = new FileOperator(context);
 	const statsGenerator = new StatsGenerator();
 	codeTimer.init(fileOperator);
-	statsGenerator.init();
+	statsGenerator.init(context);
 
 	let disposable = vscode.commands.registerCommand(
 		'codegroove.runCodegroove',

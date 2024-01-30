@@ -7,12 +7,22 @@ export class StatsGenerator {
 		vscode.ViewColumn.One,
 		{},
 	);
+	context: any;
 
-	init() {
+	init(context: any) {
+		this.context = context;
 		this.panel.webview.html = this.getWebviewContent();
 	}
 
 	getWebviewContent() {
+		const onDiskPath = vscode.Uri.joinPath(
+			this.context.extensionUri,
+			'assets',
+			'codegroove.png',
+		);
+
+		const logoSrc = this.panel.webview.asWebviewUri(onDiskPath);
+
 		return `<!DOCTYPE html>
             <html lang="en">
             <head>
@@ -21,7 +31,7 @@ export class StatsGenerator {
                 <title>Code Timer Stats</title>
             </head>
             <body>
-                <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" width="300" />
+                <img src="${logoSrc}" width="300" />
             </body>
             </html>`;
 	}
