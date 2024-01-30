@@ -5,12 +5,11 @@ import { StatsGenerator } from './StatsGenerator';
 
 const codeTimer = new CodeTimer();
 
-
 export function activate(context: vscode.ExtensionContext) {
 	const fileOperator = new FileOperator(context);
 	const statsGenerator = new StatsGenerator();
 	codeTimer.init(fileOperator);
-	
+	statsGenerator.init();
 
 	let disposable = vscode.commands.registerCommand(
 		'codegroove.runCodegroove',
