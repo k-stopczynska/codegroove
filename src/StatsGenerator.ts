@@ -47,7 +47,11 @@ export class StatsGenerator {
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <link rel="stylesheet" href="${styleSrc}">
-                <script src="${scriptSrc}" defer></script>
+                <script src="
+https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js
+"></script>
+                <script src="${scriptSrc}" defer type="module"></script>
+
                 <title>Code Timer Stats</title>
             </head>
             <body>
@@ -55,6 +59,9 @@ export class StatsGenerator {
                     <img src="${logoSrc}" width="100" />
                     <h1>codegroove stats</h1>
                 </nav>
+                <main>
+                    <canvas id="charts" width="800" height="800"></canvas>
+                </main>
             </body>
             </html>`;
 	}
