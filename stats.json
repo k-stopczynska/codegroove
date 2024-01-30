@@ -1,0 +1,282 @@
+[
+	{
+		"duration": { "hours": 1, "minutes": 30, "seconds": 45 },
+		"id": "343f7e17-b4f0-4bfc-b22f-b45ec76646fc",
+		"language": "python",
+		"project": "rekru_bot",
+		"start": "1/30/2024, 6:06:50 PM"
+	},
+	{
+		"duration": { "hours": 0, "minutes": 45, "seconds": 22 },
+		"id": "48a0c4a2-5804-4f2b-b15d-3a8e2a8de4c3",
+		"language": "javascript",
+		"project": "web_app",
+		"start": "2/15/2024, 9:12:30 AM"
+	},
+	{
+		"duration": { "hours": 2, "minutes": 15, "seconds": 10 },
+		"id": "c12f2b65-1843-4851-84c8-ccf18acab309",
+		"language": "java",
+		"project": "enterprise_app",
+		"start": "3/5/2024, 2:30:00 PM"
+	},
+	{
+		"duration": { "hours": 1, "minutes": 0, "seconds": 5 },
+		"id": "7e1af15c-906e-4ac4-86dd-6f197fe9e9f2",
+		"language": "python",
+		"project": "data_analysis",
+		"start": "4/10/2024, 8:45:15 AM"
+	},
+	{
+		"duration": { "hours": 0, "minutes": 20, "seconds": 30 },
+		"id": "9d4eb26a-3f35-4757-8e95-79aa1061b4b3",
+		"language": "javascript",
+		"project": "mobile_app",
+		"start": "5/20/2024, 4:20:45 PM"
+	},
+	{
+		"duration": { "hours": 3, "minutes": 30, "seconds": 45 },
+		"id": "343f7e17-b4f0-4bfc-b22f-b45ec76646fc",
+		"language": "python",
+		"project": "rekru_bot",
+		"start": "1/30/2024, 12:06:50 PM"
+	},
+	{
+		"duration": { "hours": 3, "minutes": 45, "seconds": 22 },
+		"id": "48a0c4a2-5804-4f2b-b15d-3a8e2a8de4c3",
+		"language": "javascript",
+		"project": "web_app",
+		"start": "2/16/2024, 2:12:30 PM"
+	},
+	{
+		"duration": { "hours": 1, "minutes": 15, "seconds": 10 },
+		"id": "c12f2b65-1843-4851-84c8-ccf18acab309",
+		"language": "java",
+		"project": "enterprise_app",
+		"start": "2/17/2024, 2:30:00 PM"
+	},
+	{
+		"duration": { "hours": 1, "minutes": 23, "seconds": 5 },
+		"id": "7e1af15c-906e-4ac4-86dd-6f197fe9e9f2",
+		"language": "python",
+		"project": "data_analysis",
+		"start": "3/10/2024, 8:45:15 AM"
+	},
+	{
+		"duration": { "hours": 4, "minutes": 20, "seconds": 30 },
+		"id": "9d4eb26a-3f35-4757-8e95-79aa1061b4b3",
+		"language": "javascript",
+		"project": "mobile_app",
+		"start": "5/20/2024, 4:20:45 AM"
+	},
+    	{
+		"duration": { "hours": 1, "minutes": 30, "seconds": 45 },
+		"id": "343f7e17-b4f0-4bfc-b22f-b45ec76646fc",
+		"language": "python",
+		"project": "rekru_bot",
+		"start": "6/30/2024, 6:06:50 PM"
+	},
+	{
+		"duration": { "hours": 0, "minutes": 45, "seconds": 22 },
+		"id": "48a0c4a2-5804-4f2b-b15d-3a8e2a8de4c3",
+		"language": "javascript",
+		"project": "web_app",
+		"start": "7/15/2024, 9:12:30 AM"
+	},
+	{
+		"duration": { "hours": 2, "minutes": 15, "seconds": 10 },
+		"id": "c12f2b65-1843-4851-84c8-ccf18acab309",
+		"language": "java",
+		"project": "enterprise_app",
+		"start": "7/5/2024, 2:30:00 PM"
+	},
+	{
+		"duration": { "hours": 1, "minutes": 0, "seconds": 5 },
+		"id": "7e1af15c-906e-4ac4-86dd-6f197fe9e9f2",
+		"language": "python",
+		"project": "data_analysis",
+		"start": "7/10/2024, 8:45:15 AM"
+	},
+	{
+		"duration": { "hours": 0, "minutes": 20, "seconds": 30 },
+		"id": "9d4eb26a-3f35-4757-8e95-79aa1061b4b3",
+		"language": "javascript",
+		"project": "mobile_app",
+		"start": "6/20/2024, 4:20:45 PM"
+	},
+    	{
+		"duration": { "hours": 1, "minutes": 30, "seconds": 45 },
+		"id": "343f7e17-b4f0-4bfc-b22f-b45ec76646fc",
+		"language": "python",
+		"project": "rekru_bot",
+		"start": "8/30/2024, 6:06:50 PM"
+	},
+	{
+		"duration": { "hours": 0, "minutes": 45, "seconds": 22 },
+		"id": "48a0c4a2-5804-4f2b-b15d-3a8e2a8de4c3",
+		"language": "javascript",
+		"project": "web_app",
+		"start": "8/15/2024, 9:12:30 AM"
+	},
+	{
+		"duration": { "hours": 2, "minutes": 15, "seconds": 10 },
+		"id": "c12f2b65-1843-4851-84c8-ccf18acab309",
+		"language": "java",
+		"project": "enterprise_app",
+		"start": "8/5/2024, 2:30:00 PM"
+	},
+	{
+		"duration": { "hours": 1, "minutes": 0, "seconds": 5 },
+		"id": "7e1af15c-906e-4ac4-86dd-6f197fe9e9f2",
+		"language": "python",
+		"project": "data_analysis",
+		"start": "9/10/2024, 8:45:15 AM"
+	},
+	{
+		"duration": { "hours": 0, "minutes": 20, "seconds": 30 },
+		"id": "9d4eb26a-3f35-4757-8e95-79aa1061b4b3",
+		"language": "javascript",
+		"project": "mobile_app",
+		"start": "9/20/2024, 4:20:45 PM"
+	},
+    	{
+		"duration": { "hours": 1, "minutes": 30, "seconds": 45 },
+		"id": "343f7e17-b4f0-4bfc-b22f-b45ec76646fc",
+		"language": "python",
+		"project": "rekru_bot",
+		"start": "9/30/2024, 6:06:50 PM"
+	},
+	{
+		"duration": { "hours": 0, "minutes": 45, "seconds": 22 },
+		"id": "48a0c4a2-5804-4f2b-b15d-3a8e2a8de4c3",
+		"language": "javascript",
+		"project": "web_app",
+		"start": "9/15/2024, 9:12:30 AM"
+	},
+	{
+		"duration": { "hours": 2, "minutes": 15, "seconds": 10 },
+		"id": "c12f2b65-1843-4851-84c8-ccf18acab309",
+		"language": "java",
+		"project": "enterprise_app",
+		"start": "2/5/2024, 2:30:00 PM"
+	},
+	{
+		"duration": { "hours": 1, "minutes": 0, "seconds": 5 },
+		"id": "7e1af15c-906e-4ac4-86dd-6f197fe9e9f2",
+		"language": "python",
+		"project": "data_analysis",
+		"start": "3/10/2024, 8:45:15 AM"
+	},
+	{
+		"duration": { "hours": 0, "minutes": 20, "seconds": 30 },
+		"id": "9d4eb26a-3f35-4757-8e95-79aa1061b4b3",
+		"language": "javascript",
+		"project": "mobile_app",
+		"start": "10/20/2024, 4:20:45 PM"
+	},
+    	{
+		"duration": { "hours": 1, "minutes": 30, "seconds": 45 },
+		"id": "343f7e17-b4f0-4bfc-b22f-b45ec76646fc",
+		"language": "python",
+		"project": "rekru_bot",
+		"start": "10/30/2024, 6:06:50 PM"
+	},
+	{
+		"duration": { "hours": 0, "minutes": 45, "seconds": 22 },
+		"id": "48a0c4a2-5804-4f2b-b15d-3a8e2a8de4c3",
+		"language": "javascript",
+		"project": "web_app",
+		"start": "10/15/2024, 9:12:30 AM"
+	},
+	{
+		"duration": { "hours": 2, "minutes": 15, "seconds": 10 },
+		"id": "c12f2b65-1843-4851-84c8-ccf18acab309",
+		"language": "java",
+		"project": "enterprise_app",
+		"start": "11/5/2024, 2:30:00 PM"
+	},
+	{
+		"duration": { "hours": 1, "minutes": 0, "seconds": 5 },
+		"id": "7e1af15c-906e-4ac4-86dd-6f197fe9e9f2",
+		"language": "python",
+		"project": "data_analysis",
+		"start": "11/10/2024, 8:45:15 AM"
+	},
+	{
+		"duration": { "hours": 0, "minutes": 20, "seconds": 30 },
+		"id": "9d4eb26a-3f35-4757-8e95-79aa1061b4b3",
+		"language": "javascript",
+		"project": "mobile_app",
+		"start": "11/20/2024, 4:20:45 PM"
+	},
+    	{
+		"duration": { "hours": 1, "minutes": 30, "seconds": 45 },
+		"id": "343f7e17-b4f0-4bfc-b22f-b45ec76646fc",
+		"language": "python",
+		"project": "rekru_bot",
+		"start": "11/30/2024, 6:06:50 PM"
+	},
+	{
+		"duration": { "hours": 0, "minutes": 45, "seconds": 22 },
+		"id": "48a0c4a2-5804-4f2b-b15d-3a8e2a8de4c3",
+		"language": "javascript",
+		"project": "web_app",
+		"start": "12/15/2024, 9:12:30 AM"
+	},
+	{
+		"duration": { "hours": 2, "minutes": 15, "seconds": 10 },
+		"id": "c12f2b65-1843-4851-84c8-ccf18acab309",
+		"language": "java",
+		"project": "enterprise_app",
+		"start": "12/5/2024, 2:30:00 PM"
+	},
+	{
+		"duration": { "hours": 1, "minutes": 0, "seconds": 5 },
+		"id": "7e1af15c-906e-4ac4-86dd-6f197fe9e9f2",
+		"language": "python",
+		"project": "data_analysis",
+		"start": "12/10/2024, 8:45:15 AM"
+	},
+	{
+		"duration": { "hours": 0, "minutes": 20, "seconds": 30 },
+		"id": "9d4eb26a-3f35-4757-8e95-79aa1061b4b3",
+		"language": "javascript",
+		"project": "mobile_app",
+		"start": "12/20/2024, 4:20:45 PM"
+	},
+    	{
+		"duration": { "hours": 1, "minutes": 30, "seconds": 45 },
+		"id": "343f7e17-b4f0-4bfc-b22f-b45ec76646fc",
+		"language": "python",
+		"project": "rekru_bot",
+		"start": "12/30/2024, 6:06:50 PM"
+	},
+	{
+		"duration": { "hours": 0, "minutes": 45, "seconds": 22 },
+		"id": "48a0c4a2-5804-4f2b-b15d-3a8e2a8de4c3",
+		"language": "javascript",
+		"project": "web_app",
+		"start": "8/15/2024, 9:12:30 AM"
+	},
+	{
+		"duration": { "hours": 2, "minutes": 15, "seconds": 10 },
+		"id": "c12f2b65-1843-4851-84c8-ccf18acab309",
+		"language": "java",
+		"project": "enterprise_app",
+		"start": "7/5/2024, 2:30:00 PM"
+	},
+	{
+		"duration": { "hours": 1, "minutes": 0, "seconds": 5 },
+		"id": "7e1af15c-906e-4ac4-86dd-6f197fe9e9f2",
+		"language": "python",
+		"project": "data_analysis",
+		"start": "8/10/2024, 8:45:15 AM"
+	},
+	{
+		"duration": { "hours": 0, "minutes": 20, "seconds": 30 },
+		"id": "9d4eb26a-3f35-4757-8e95-79aa1061b4b3",
+		"language": "javascript",
+		"project": "mobile_app",
+		"start": "6/20/2024, 4:20:45 PM"
+	}
+]

@@ -12,6 +12,9 @@ export class StatsGenerator {
 	init(context: any) {
 		this.context = context;
 		this.panel.webview.html = this.getWebviewContent();
+		console.log(
+			vscode.Uri.joinPath(this.context.extensionUri, 'stats.json'),
+		);
 	}
 
 	getWebviewContent() {
@@ -19,19 +22,27 @@ export class StatsGenerator {
 			this.context.extensionUri,
 			'assets',
 			'codegroove.png',
-		);
+        );
+        
+        const stylePath = vscode.Uri.joinPath(this.context.extensionUri, 'src', 'styles.css');
 
-		const logoSrc = this.panel.webview.asWebviewUri(onDiskPath);
+        const logoSrc = this.panel.webview.asWebviewUri(onDiskPath);
+        
+        const styleSrc = this.panel.webview.asWebviewUri(stylePath);
 
 		return `<!DOCTYPE html>
             <html lang="en">
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <link rel="stylesheet" href="${styleSrc}">
                 <title>Code Timer Stats</title>
             </head>
             <body>
-                <img src="${logoSrc}" width="300" />
+                <nav>
+                    <img src="${logoSrc}" width="100" />
+                    <h1>codegroove stats</h1>
+                </nav>
             </body>
             </html>`;
 	}

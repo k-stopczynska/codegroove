@@ -55,8 +55,10 @@ export class CodeTimer {
 			project: this.project,
 			language: this.lang,
 			id: this.id,
+			start: this.start,
 			duration: this.duration,
 		};
+		console.log(prevSession);
 		this.sessions.push(prevSession);
 	}
 
