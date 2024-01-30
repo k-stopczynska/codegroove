@@ -19,7 +19,6 @@ export class FileOperator {
 			await vscode.workspace.fs.stat(fileUri);
 			return true;
 		} catch (error) {
-			// If an error occurs, it means the file doesn't exist
 			return false;
 		}
 	}
