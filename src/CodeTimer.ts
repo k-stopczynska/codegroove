@@ -26,7 +26,6 @@ export class CodeTimer {
 	sessions: Session[] = [];
 
 	init() {
-		
 		const timer = setInterval(() => this.updateStatusBar(), 1000);
 		this.setCurrentLanguage(this.getCurrentLanguage());
 		this.setCurrentProject(this.getCurrentProject());
@@ -53,13 +52,7 @@ export class CodeTimer {
 	}
 
 	savePreviousSession() {
-		this.setDuration(this.getSessionDuration())
-		console.log({
-			project: this.project,
-			language: this.lang,
-			id: this.id,
-			duration: this.duration,
-		});
+		this.setDuration(this.getSessionDuration());
 		const prevSession = {
 			project: this.project,
 			language: this.lang,
@@ -133,10 +126,10 @@ export class CodeTimer {
 	}
 
 	onProjectChange(event: any) {
-		this.savePreviousSession();
 		if (event.focused && event.active) {
 			const currProj = this.getCurrentProject();
 			if (currProj !== this.project) {
+				this.savePreviousSession();
 				this.setCurrentProject(currProj);
 				this.setCurrentSession();
 			}
@@ -144,12 +137,12 @@ export class CodeTimer {
 	}
 
 	onLangChange() {
-		this.savePreviousSession();
 		const currLang = this.getCurrentLanguage();
 		if (
 			currLang !== 'No active editor detected' &&
 			currLang !== this.lang
 		) {
+			this.savePreviousSession();
 			this.setCurrentLanguage(currLang);
 			this.setCurrentSession();
 		}
@@ -163,6 +156,7 @@ export class CodeTimer {
 	// TODO: create UI with charts as a dashboard
 
 	dispose() {
+		this.savePreviousSession();
 		this.statusBar.dispose();
 	}
 }
