@@ -1,12 +1,6 @@
 import * as vscode from 'vscode';
 import { v4 } from 'uuid';
-
-type Session = {
-	project: string;
-	language: string;
-	id: string;
-	duration: string;
-};
+import { Session } from './types';
 
 export class CodeTimer {
 	start = '';
