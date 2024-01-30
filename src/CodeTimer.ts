@@ -54,7 +54,6 @@ export class CodeTimer {
 			duration: this.duration,
 		};
 		this.sessions.push(prevSession);
-		console.log(this.sessions);
 	}
 
 	setStart(start: string) {
@@ -150,6 +149,7 @@ export class CodeTimer {
 	// TODO: create UI with charts as a dashboard
 
 	dispose() {
+	// TODO: this is not preserving last session before project and context change
 		this.savePreviousSession();
 		this.statusBar.dispose();
 	}
