@@ -19,8 +19,12 @@ export class CodeTimer {
 
 	sessions: Session[] = [];
 
-	init() {
+	fileOperator: any;
+
+	init(fileOperator: any) {
 		const timer = setInterval(() => this.updateStatusBar(), 1000);
+		this.fileOperator = fileOperator;
+		this.fileOperator.readStats();
 		this.setCurrentLanguage(this.getCurrentLanguage());
 		this.setCurrentProject(this.getCurrentProject());
 		this.setCurrentSession();
@@ -149,8 +153,8 @@ export class CodeTimer {
 	// TODO: create UI with charts as a dashboard
 
 	dispose() {
-	// TODO: this is not preserving last session before project and context change
 		this.savePreviousSession();
+		this.fileOperator.saveStats(this.sessions);
 		this.statusBar.dispose();
 	}
 }

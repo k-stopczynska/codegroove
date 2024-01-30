@@ -6,8 +6,9 @@ const codeTimer = new CodeTimer();
 
 
 export function activate(context: vscode.ExtensionContext) {
-	codeTimer.init();
 	const fileOperator = new FileOperator(context);
+	codeTimer.init(fileOperator);
+	
 
 	let disposable = vscode.commands.registerCommand(
 		'codegroove.runCodegroove',
