@@ -5,7 +5,9 @@ export class StatsGenerator {
 		'codeTimerStats',
 		'Code Timer Stats',
 		vscode.ViewColumn.One,
-		{},
+		{
+			enableScripts: true,
+		},
 	);
 	context: any;
 
@@ -18,17 +20,26 @@ export class StatsGenerator {
 	}
 
 	getWebviewContent() {
-		const onDiskPath = vscode.Uri.joinPath(
+		const logoPath = vscode.Uri.joinPath(
 			this.context.extensionUri,
 			'assets',
 			'codegroove.png',
-        );
-        
-        const stylePath = vscode.Uri.joinPath(this.context.extensionUri, 'src', 'styles.css');
+		);
+		const logoSrc = this.panel.webview.asWebviewUri(logoPath);
 
-        const logoSrc = this.panel.webview.asWebviewUri(onDiskPath);
-        
-        const styleSrc = this.panel.webview.asWebviewUri(stylePath);
+		const stylePath = vscode.Uri.joinPath(
+			this.context.extensionUri,
+			'src',
+			'styles.css',
+		);
+		const styleSrc = this.panel.webview.asWebviewUri(stylePath);
+
+		const scriptPath = vscode.Uri.joinPath(
+			this.context.extensionUri,
+			'src',
+			'charts.js',
+		);
+		const scriptSrc = this.panel.webview.asWebviewUri(scriptPath);
 
 		return `<!DOCTYPE html>
             <html lang="en">
@@ -36,6 +47,7 @@ export class StatsGenerator {
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <link rel="stylesheet" href="${styleSrc}">
+                <script src="${scriptSrc}" defer></script>
                 <title>Code Timer Stats</title>
             </head>
             <body>
