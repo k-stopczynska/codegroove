@@ -1,5 +1,3 @@
-console.log('hello from script charts.js');
-
 
 (async function() {
   const data = [

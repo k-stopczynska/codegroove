@@ -14,9 +14,7 @@ export class StatsGenerator {
 	init(context: any) {
 		this.context = context;
 		this.panel.webview.html = this.getWebviewContent();
-		console.log(
-			vscode.Uri.joinPath(this.context.extensionUri, 'stats.json'),
-		);
+		this.fetchData();
 	}
 
 	getWebviewContent() {
@@ -47,9 +45,7 @@ export class StatsGenerator {
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <link rel="stylesheet" href="${styleSrc}">
-                <script src="
-https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js
-"></script>
+                <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
                 <script src="${scriptSrc}" defer type="module"></script>
 
                 <title>Code Timer Stats</title>
@@ -104,4 +100,24 @@ https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js
             </body>
             </html>`;
 	}
+
+	fetchData = async () => {
+		console.log('fetching....');
+		const dataPath = vscode.Uri.joinPath(
+			this.context.extensionUri,
+			'stats.json',
+		);
+
+		try {
+			const content = await vscode.workspace.fs.readFile(dataPath);
+
+			const contentString = Buffer.from(content).toString();
+
+			const jsonData = JSON.parse(contentString);
+
+			console.log(jsonData);
+		} catch (error) {
+			console.error('Error fetching data:', error);
+		}
+	};
 }
