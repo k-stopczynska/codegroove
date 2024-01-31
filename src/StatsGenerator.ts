@@ -55,12 +55,51 @@ https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js
                 <title>Code Timer Stats</title>
             </head>
             <body>
-                <nav>
+                <nav class="nav__container">
                     <img src="${logoSrc}" width="100" />
                     <h1>codegroove stats</h1>
                 </nav>
                 <main>
-                    <canvas id="charts" width="800" height="800"></canvas>
+                    <section class="section__container">
+                        <div class="chart">
+                            <canvas id="chart1"></canvas>
+                        </div>
+                             <div class="chart">
+                            <canvas id="chart2"></canvas>
+                        </div>
+                             <div class="chart">
+                            <canvas id="chart3"></canvas>
+                        </div>
+                             <div class="chart">
+                            <canvas id="chart4"></canvas>
+                        </div>
+                             <div class="chart">
+                            <canvas id="chart5"></canvas>
+                        </div>
+                             <div class="chart">
+                            <canvas id="chart6"></canvas>
+                        </div>
+                             <div class="chart">
+                            <canvas id="chart7"></canvas>
+                        </div>
+                             <div class="chart">
+                            <canvas id="chart8"></canvas>
+                        </div>
+                             <div class="chart">
+                            <canvas id="chart9"></canvas>
+                        </div>
+                             <div class="chart">
+                            <canvas id="chart10"></canvas>
+                        </div>
+                             <div class="chart">
+                            <canvas id="chart11"></canvas>
+                        </div>
+                             <div class="chart">
+                            <canvas id="chart12"></canvas>
+                        </div>
+                       
+    
+                    </section>
                 </main>
             </body>
             </html>`;

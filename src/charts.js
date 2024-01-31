@@ -13,9 +13,174 @@ console.log('hello from script charts.js');
   ];
 
   new Chart(
-    document.getElementById('charts'),
+    document.getElementById('chart1'),
     {
       type: 'bar',
+      data: {
+        labels: data.map(row => row.year),
+        datasets: [
+          {
+            label: 'Acquisitions by year',
+            data: data.map(row => row.count)
+          }
+        ]
+      }
+    }
+    );
+      new Chart(
+    document.getElementById('chart2'),
+    {
+      type: 'line',
+      data: {
+        labels: data.map(row => row.year),
+        datasets: [
+          {
+            label: 'Acquisitions by year',
+            data: data.map(row => row.count)
+          }
+        ]
+      }
+    }
+    );
+      new Chart(
+    document.getElementById('chart3'),
+    {
+      type: 'doughnut',
+      data: {
+        labels: data.map(row => row.year),
+        datasets: [
+          {
+            label: 'Acquisitions by year',
+            data: data.map(row => row.count)
+          }
+        ]
+      }
+    }
+    );
+      new Chart(
+    document.getElementById('chart4'),
+    {
+      type: 'bar',
+      data: {
+        labels: data.map(row => row.year),
+        datasets: [
+          {
+            label: 'Acquisitions by year',
+            data: data.map(row => row.count)
+          }
+        ]
+      }
+    }
+    );
+      new Chart(
+    document.getElementById('chart5'),
+    {
+      type: 'line',
+      data: {
+        labels: data.map(row => row.year),
+        datasets: [
+          {
+            label: 'Acquisitions by year',
+            data: data.map(row => row.count)
+          }
+        ]
+      }
+    }
+    );
+      new Chart(
+    document.getElementById('chart6'),
+    {
+      type: 'doughnut',
+      data: {
+        labels: data.map(row => row.year),
+        datasets: [
+          {
+            label: 'Acquisitions by year',
+            data: data.map(row => row.count)
+          }
+        ]
+      }
+    }
+    );
+      new Chart(
+    document.getElementById('chart7'),
+    {
+      type: 'bar',
+      data: {
+        labels: data.map(row => row.year),
+        datasets: [
+          {
+            label: 'Acquisitions by year',
+            data: data.map(row => row.count)
+          }
+        ]
+      }
+    }
+    );
+      new Chart(
+    document.getElementById('chart8'),
+    {
+      type: 'line',
+      data: {
+        labels: data.map(row => row.year),
+        datasets: [
+          {
+            label: 'Acquisitions by year',
+            data: data.map(row => row.count)
+          }
+        ]
+      }
+    }
+    );
+      new Chart(
+    document.getElementById('chart9'),
+    {
+      type: 'doughnut',
+      data: {
+        labels: data.map(row => row.year),
+        datasets: [
+          {
+            label: 'Acquisitions by year',
+            data: data.map(row => row.count)
+          }
+        ]
+      }
+    }
+    );
+      new Chart(
+    document.getElementById('chart10'),
+    {
+      type: 'bar',
+      data: {
+        labels: data.map(row => row.year),
+        datasets: [
+          {
+            label: 'Acquisitions by year',
+            data: data.map(row => row.count)
+          }
+        ]
+      }
+    }
+    );
+      new Chart(
+    document.getElementById('chart11'),
+    {
+      type: 'line',
+      data: {
+        labels: data.map(row => row.year),
+        datasets: [
+          {
+            label: 'Acquisitions by year',
+            data: data.map(row => row.count)
+          }
+        ]
+      }
+    }
+    );
+      new Chart(
+    document.getElementById('chart12'),
+    {
+      type: 'doughnut',
       data: {
         labels: data.map(row => row.year),
         datasets: [
