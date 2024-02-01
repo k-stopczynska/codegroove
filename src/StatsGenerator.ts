@@ -115,14 +115,40 @@ export class StatsGenerator {
 			const content = await vscode.workspace.fs.readFile(dataPath);
 			const contentString = Buffer.from(content).toString();
 			const jsonData = JSON.parse(contentString);
+			this.filterDates(jsonData);
 
 			// const chartsHtml = this.generateChartsHtml(jsonData);
 			// this.panel.webview.html = chartsHtml;
 
-			console.log(jsonData);
+			const durations =
+				this.getDurationPerProjectAndPerLanguage(jsonData);
+
+			console.log(durations[0], durations[1]);
 		} catch (error) {
 			console.error('Error fetching data:', error);
 		}
+	}
+
+	getCurrentTime() {
+		const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+		const date = new Date();
+		const currTime = date.toLocaleString('en-US', { timeZone: timeZone });
+		return currTime;
+	}
+
+	filterDates(data: Session[]) {
+		const currTime = this.getCurrentTime();
+		const splitted = currTime.split('/');
+		const dailySessions = data.filter(
+			(data) => data.start.split('/')[0] === splitted[0],
+		);
+		const monthlySessions = data.filter(
+			(data) => data.start.split('/')[1] === splitted[1],
+		);
+		const yearlySessions = data.filter(
+			(data) => data.start.split('/')[2] === splitted[2],
+		);
+		return [dailySessions, monthlySessions, yearlySessions];
 	}
 
 	getDurationPerProjectAndPerLanguage(data: Session[]) {
@@ -144,6 +170,7 @@ export class StatsGenerator {
 			}
 			durationPerLanguage[entry.language] += totalSeconds;
 		});
+		return [durationPerProject, durationPerLanguage];
 	}
 
 	// 	generateChartsHtml(data: any) {
