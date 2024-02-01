@@ -9,10 +9,13 @@ export class StatsGenerator {
 			enableScripts: true,
 		},
 	);
-	context: any;
+	context: vscode.ExtensionContext;
 
-	init(context: any) {
+	constructor(context: vscode.ExtensionContext) {
 		this.context = context;
+	}
+
+	init() {
 		this.panel.webview.html = this.getWebviewContent();
 		this.fetchData();
 	}
@@ -102,7 +105,6 @@ export class StatsGenerator {
 	}
 
 	fetchData = async () => {
-		console.log('fetching....');
 		const dataPath = vscode.Uri.joinPath(
 			this.context.extensionUri,
 			'stats.json',

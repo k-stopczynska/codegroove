@@ -58,7 +58,6 @@ export class CodeTimer {
 			start: this.start,
 			duration: this.duration,
 		};
-		console.log(prevSession);
 		this.sessions.push(prevSession);
 	}
 
@@ -154,9 +153,9 @@ export class CodeTimer {
 	// TODO: update daily and total coding time
 	// TODO: create UI with charts as a dashboard
 
-	dispose() {
+	async dispose() {
 		this.savePreviousSession();
-		this.fileOperator.saveStats(this.sessions);
+		await this.fileOperator.saveStats(this.sessions);
 		this.statusBar.dispose();
 	}
 }
