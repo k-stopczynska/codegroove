@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { Session } from './types';
 
 export class StatsGenerator {
 	panel = vscode.window.createWebviewPanel(
@@ -104,7 +105,7 @@ export class StatsGenerator {
             </html>`;
 	}
 
-	fetchData = async () => {
+	async fetchData() {
 		const dataPath = vscode.Uri.joinPath(
 			this.context.extensionUri,
 			'stats.json',
@@ -112,14 +113,117 @@ export class StatsGenerator {
 
 		try {
 			const content = await vscode.workspace.fs.readFile(dataPath);
-
 			const contentString = Buffer.from(content).toString();
-
 			const jsonData = JSON.parse(contentString);
+
+			// const chartsHtml = this.generateChartsHtml(jsonData);
+			// this.panel.webview.html = chartsHtml;
 
 			console.log(jsonData);
 		} catch (error) {
 			console.error('Error fetching data:', error);
 		}
-	};
+	}
+
+	getDurationPerProjectAndPerLanguage(data: Session[]) {
+		const durationPerProject: any = {};
+		const durationPerLanguage: any = {};
+		data.forEach((entry: Session) => {
+			const totalSeconds =
+				+entry.duration.hours * 3600 +
+				+entry.duration.minutes * 60 +
+				entry.duration.seconds;
+
+			if (!durationPerProject[entry.project]) {
+				durationPerProject[entry.project] = 0;
+			}
+			durationPerProject[entry.project] += totalSeconds;
+
+			if (!durationPerLanguage[entry.language]) {
+				durationPerLanguage[entry.language] = 0;
+			}
+			durationPerLanguage[entry.language] += totalSeconds;
+		});
+	}
+
+	// 	generateChartsHtml(data: any) {
+	// 		const logoPath = vscode.Uri.joinPath(
+	// 			this.context.extensionUri,
+	// 			'assets',
+	// 			'codegroove.png',
+	// 		);
+	// 		const logoSrc = this.panel.webview.asWebviewUri(logoPath);
+
+	// 		const stylePath = vscode.Uri.joinPath(
+	// 			this.context.extensionUri,
+	// 			'src',
+	// 			'styles.css',
+	// 		);
+	// 		const styleSrc = this.panel.webview.asWebviewUri(stylePath);
+
+	// 		const chartScriptPath = vscode.Uri.joinPath(
+	// 			this.context.extensionUri,
+	// 			'src',
+	// 			'charts.js',
+	// 		);
+	// 		const chartScriptSrc = this.panel.webview.asWebviewUri(chartScriptPath);
+
+	// 		const chartContainers = Object.keys(data).map((language, index) => {
+	// 			const chartData = data[language]; // Assuming your data structure
+	// 			const chartConfig = this.getChartConfiguration(language, chartData);
+
+	// 			return `<div class="chart">
+	//               <canvas id="chart${index + 1}"></canvas>
+	//               <script>
+	//                 ${chartConfig}
+	//               </script>
+	//             </div>`;
+	// 		});
+
+	// 		return `
+	//     <!DOCTYPE html>
+	//     <html lang="en">
+	//     <head>
+	//         <meta charset="UTF-8">
+	//         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	//         <link rel="stylesheet" href="${styleSrc}">
+	//         <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+	//         <script src="${chartScriptSrc}" defer type="module"></script>
+	//         <title>Code Timer Stats</title>
+	//     </head>
+	//     <body>
+	//             <nav class="nav__container">
+	//                 <img src="${logoSrc}" width="100" />
+	//                 <h1>codegroove stats</h1>
+	//             </nav>
+	//         <main>
+	//             <section class="section__container">
+	//                 ${chartContainers.join('')}
+	//             </section>
+	//         </main>
+	//     </body>
+	//     </html>`;
+	// 	}
+
+	// 	getChartConfiguration(language: string, data: any) {
+	// 		// Your logic to generate chart configuration based on data
+	// 		return `
+	//     const data_${language} = ${JSON.stringify(data)};
+	//     new Chart(
+	//       document.getElementById('chart${index + 1}'),
+	//       {
+	//         type: 'bar',
+	//         data: {
+	//           labels: data_${language}.map(row => row.year),
+	//           datasets: [
+	//             {
+	//               label: 'Acquisitions by year',
+	//               data: data_${language}.map(row => row.count),
+	//             },
+	//           ],
+	//         },
+	//       }
+	//     );
+	//   `;
+	// 	}
 }

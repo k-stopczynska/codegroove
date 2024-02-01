@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { v4 } from 'uuid';
-import { Session } from './types';
+import { Session, Duration } from './types';
 
 export class CodeTimer {
 	start = '';
@@ -15,7 +15,7 @@ export class CodeTimer {
 
 	id = '';
 
-	duration = '';
+	duration: Duration = {hours: '', minutes: '', seconds: ''};
 
 	sessions: Session[] = [];
 
