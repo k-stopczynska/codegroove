@@ -115,15 +115,15 @@ export class StatsGenerator {
 			const content = await vscode.workspace.fs.readFile(dataPath);
 			const contentString = Buffer.from(content).toString();
 			const jsonData = JSON.parse(contentString);
-			this.filterDates(jsonData);
+			const sessions = this.filterDates(jsonData);
 
 			// const chartsHtml = this.generateChartsHtml(jsonData);
 			// this.panel.webview.html = chartsHtml;
 
 			const durations =
-				this.getDurationPerProjectAndPerLanguage(jsonData);
+				sessions.map((session) => this.getDurationPerProjectAndPerLanguage(session));
 
-			console.log(durations[0], durations[1]);
+			console.log(durations);
 		} catch (error) {
 			console.error('Error fetching data:', error);
 		}
@@ -138,15 +138,18 @@ export class StatsGenerator {
 
 	filterDates(data: Session[]) {
 		const currTime = this.getCurrentTime();
-		const splitted = currTime.split('/');
+        const splitted = currTime.split('/');
+        
 		const dailySessions = data.filter(
-			(data) => data.start.split('/')[0] === splitted[0],
-		);
-		const monthlySessions = data.filter(
 			(data) => data.start.split('/')[1] === splitted[1],
 		);
+		const monthlySessions = data.filter(
+			(data) => data.start.split('/')[0] === splitted[0],
+		);
 		const yearlySessions = data.filter(
-			(data) => data.start.split('/')[2] === splitted[2],
+			(data) =>
+				data.start.split('/')[2].split(',')[0] ===
+				splitted[2].split(',')[0],
 		);
 		return [dailySessions, monthlySessions, yearlySessions];
 	}
