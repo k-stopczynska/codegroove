@@ -102,35 +102,34 @@ export class StatsGenerator {
 			}
 			durationPerLanguage[entry.language] += totalSeconds;
 
-			if (chunk === 'daily') {
-				const startHour = new Date(entry.start).getHours();
-				const endHour =
-					new Date(entry.start).getHours() +
-					Math.ceil(+totalSeconds / 3600);
+			switch (chunk) {
+				case 'daily':
+					const startHour = new Date(entry.start).getHours();
+					const endHour =
+						new Date(entry.start).getHours() +
+						Math.ceil(+totalSeconds / 3600);
 
-				for (let hour = startHour; hour <= endHour; hour++) {
-					if (!durationInChunks[hour]) {
-						durationInChunks[hour] = 0;
+					for (let hour = startHour; hour <= endHour; hour++) {
+						if (!durationInChunks[hour]) {
+							durationInChunks[hour] = 0;
+						}
+						durationInChunks[hour] +=
+							+totalSeconds / (endHour - startHour + 1);
 					}
-					durationInChunks[hour] +=
-						+totalSeconds / (endHour - startHour + 1);
-				}
-			}
 
-			if (chunk === 'monthly') {
-				const dayKey = new Date(entry.start).getDate();
-				if (!durationInChunks[dayKey]) {
-					durationInChunks[dayKey] = 0;
-				}
-				durationInChunks[dayKey] += totalSeconds;
-			}
+				case 'monthly':
+					const dayKey = new Date(entry.start).getDate();
+					if (!durationInChunks[dayKey]) {
+						durationInChunks[dayKey] = 0;
+					}
+					durationInChunks[dayKey] += totalSeconds;
 
-			if (chunk === 'yearly') {
-				const monthKey = new Date(entry.start).getMonth() + 1;
-				if (!durationInChunks[monthKey]) {
-					durationInChunks[monthKey] = 0;
-				}
-				durationInChunks[monthKey] += totalSeconds;
+				case 'yearly':
+					const monthKey = new Date(entry.start).getMonth() + 1;
+					if (!durationInChunks[monthKey]) {
+						durationInChunks[monthKey] = 0;
+					}
+					durationInChunks[monthKey] += totalSeconds;
 			}
 		});
 
@@ -156,8 +155,8 @@ export class StatsGenerator {
 			.flat()
 			.map((stat: Session, index: number) => {
 				return `<div class="chart">
-	                    <canvas id="chart${index + 1}"></canvas>
-	                </div>`;
+	                        <canvas id="chart${index + 1}"></canvas>
+	                    </div>`;
 			});
 
 		return `
