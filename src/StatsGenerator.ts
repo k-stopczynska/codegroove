@@ -110,32 +110,25 @@ export class StatsGenerator {
 		return [durationInChunks, durationPerProject, durationPerLanguage];
 	}
 
+	getFileSrc(pathDir: string, pathFile: string): vscode.Uri {
+		const path = vscode.Uri.joinPath(
+			this.context.extensionUri,
+			pathDir,
+			pathFile,
+		);
+		const fileSrc = this.panel.webview.asWebviewUri(path);
+		return fileSrc;
+	}
+
 	generateChartsHtml(data: any) {
-		const logoPath = vscode.Uri.joinPath(
-			this.context.extensionUri,
-			'assets',
-			'codegroove.png',
-		);
-		const logoSrc = this.panel.webview.asWebviewUri(logoPath);
-
-		const stylePath = vscode.Uri.joinPath(
-			this.context.extensionUri,
-			'src',
-			'styles.css',
-		);
-		const styleSrc = this.panel.webview.asWebviewUri(stylePath);
-
-		const chartScriptPath = vscode.Uri.joinPath(
-			this.context.extensionUri,
-			'src',
-			'charts.js',
-		);
-		const chartScriptSrc = this.panel.webview.asWebviewUri(chartScriptPath);
+		const logoSrc = this.getFileSrc('assets', 'codegroove.png');
+		const styleSrc = this.getFileSrc('src', 'styles.css');
+		const chartScriptSrc = this.getFileSrc('src', 'charts.js');
 
 		const chartContainers = data.flat().map((stat: any, index: any) => {
 			return `<div class="chart">
-	              <canvas id="chart${index + 1}"></canvas>
-	            </div>`;
+	                    <canvas id="chart${index + 1}"></canvas>
+	                </div>`;
 		});
 
 		return `
@@ -144,7 +137,6 @@ export class StatsGenerator {
 	    <head>
 	        <meta charset="UTF-8">
 	        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
 	        <link rel="stylesheet" href="${styleSrc}">
 	        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
             <script src="${chartScriptSrc}" defer></script>
