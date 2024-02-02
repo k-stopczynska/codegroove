@@ -68,6 +68,7 @@ export class StatsGenerator {
 	}
 
 	getDurationPerProjectAndPerLanguage(data: Session[]) {
+		const durationInChunks: any = { type: 'line' };
 		const durationPerProject: any = { type: 'bar' };
 		const durationPerLanguage: any = { type: 'doughnut' };
 		data.forEach((entry: Session) => {
@@ -85,8 +86,28 @@ export class StatsGenerator {
 				durationPerLanguage[entry.language] = 0;
 			}
 			durationPerLanguage[entry.language] += totalSeconds;
+
+			// TODO: make it only filter by day and month if proper list is provided
+			if (data[1] !== undefined) {
+				const dayKey = new Date(entry.start).getDate();
+				console.log('day key', dayKey);
+				if (!durationInChunks[dayKey]) {
+					durationInChunks[dayKey] = 0;
+				}
+				durationInChunks[dayKey] += totalSeconds;
+			}
+
+			if (data[2] !== undefined) {
+				const monthKey = new Date(entry.start).getMonth();
+				console.log('months', monthKey);
+				if (!durationInChunks[monthKey]) {
+					durationInChunks[monthKey] = 0;
+				}
+				durationInChunks[monthKey] += totalSeconds;
+			}
 		});
-		return [durationPerProject, durationPerLanguage];
+
+		return [durationInChunks, durationPerProject, durationPerLanguage];
 	}
 
 	generateChartsHtml(data: any) {
