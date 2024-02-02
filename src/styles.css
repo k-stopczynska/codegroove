@@ -1,20 +1,25 @@
 body.vscode-light {
-	color: red;
+	color: inherit;
 }
 
 body.vscode-dark {
-	color: pink;
+	color: rgb(221, 202, 205);
 }
 
 body.vscode-high-contrast {
-	color: red;
+	color: inherit;
 }
 
 .nav__container {
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
-	margin-right: 3rem;
+	width: 100svw;
+}
+
+.nav__container h1 {
+	margin: 0 auto;
+	font-size: 3rem;
+	letter-spacing: 0.2rem;
 }
 
 .section__container {
@@ -26,7 +31,7 @@ body.vscode-high-contrast {
 }
 
 .chart {
-	background: pink;
+	background: rgb(221, 202, 205);
 	display: flex;
 	align-items: center;
 	max-height: 300px;

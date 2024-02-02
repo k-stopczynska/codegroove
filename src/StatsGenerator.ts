@@ -95,12 +95,12 @@ export class StatsGenerator {
 			if (!durationPerProject[entry.project]) {
 				durationPerProject[entry.project] = 0;
 			}
-			durationPerProject[entry.project] += totalSeconds;
+			durationPerProject[entry.project] += +totalSeconds / 3600;
 
 			if (!durationPerLanguage[entry.language]) {
 				durationPerLanguage[entry.language] = 0;
 			}
-			durationPerLanguage[entry.language] += totalSeconds;
+			durationPerLanguage[entry.language] += +totalSeconds / 3600;
 
 			switch (chunk) {
 				case 'daily':
@@ -114,7 +114,7 @@ export class StatsGenerator {
 							durationInChunks[hour] = 0;
 						}
 						durationInChunks[hour] +=
-							+totalSeconds / (endHour - startHour + 1);
+							+totalSeconds / (endHour - startHour + 1) / 3600;
 					}
 
 				case 'monthly':
@@ -122,14 +122,14 @@ export class StatsGenerator {
 					if (!durationInChunks[dayKey]) {
 						durationInChunks[dayKey] = 0;
 					}
-					durationInChunks[dayKey] += totalSeconds;
+					durationInChunks[dayKey] += +totalSeconds / 3600;
 
 				case 'yearly':
 					const monthKey = new Date(entry.start).getMonth() + 1;
 					if (!durationInChunks[monthKey]) {
 						durationInChunks[monthKey] = 0;
 					}
-					durationInChunks[monthKey] += totalSeconds;
+					durationInChunks[monthKey] += +totalSeconds / 3600;
 			}
 		});
 
