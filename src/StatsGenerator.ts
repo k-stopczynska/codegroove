@@ -120,16 +120,18 @@ export class StatsGenerator {
 		return fileSrc;
 	}
 
-	generateChartsHtml(data: any) {
+	generateChartsHtml(data: Session[][]): string {
 		const logoSrc = this.getFileSrc('assets', 'codegroove.png');
 		const styleSrc = this.getFileSrc('src', 'styles.css');
 		const chartScriptSrc = this.getFileSrc('src', 'charts.js');
 
-		const chartContainers = data.flat().map((stat: any, index: any) => {
-			return `<div class="chart">
+		const chartContainers = data
+			.flat()
+			.map((stat: Session, index: number) => {
+				return `<div class="chart">
 	                    <canvas id="chart${index + 1}"></canvas>
 	                </div>`;
-		});
+			});
 
 		return `
 	    <!DOCTYPE html>
