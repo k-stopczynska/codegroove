@@ -104,21 +104,16 @@ export class StatsGenerator {
 		);
 		const styleSrc = this.panel.webview.asWebviewUri(stylePath);
 
-		// const chartScriptPath = vscode.Uri.joinPath(
-		// 	this.context.extensionUri,
-		// 	'src',
-		// 	'charts.js',
-		// );
-		// const chartScriptSrc = this.panel.webview.asWebviewUri(chartScriptPath);
+		const chartScriptPath = vscode.Uri.joinPath(
+			this.context.extensionUri,
+			'src',
+			'charts.js',
+		);
+		const chartScriptSrc = this.panel.webview.asWebviewUri(chartScriptPath);
 
 		const chartContainers = data.flat().map((stat: any, index: any) => {
-			const chartConfig = this.getChartConfiguration('bar', stat, index);
-
 			return `<div class="chart">
 	              <canvas id="chart${index + 1}"></canvas>
-	              <script defer>
-                  ${chartConfig}
-	              </script>
 	            </div>`;
 		});
 
@@ -128,9 +123,10 @@ export class StatsGenerator {
 	    <head>
 	        <meta charset="UTF-8">
 	        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
 	        <link rel="stylesheet" href="${styleSrc}">
 	        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-	       
+            <script src="${chartScriptSrc}" defer></script>
 	        <title>Code Timer Stats</title>
 	    </head>
 	    <body>
@@ -139,31 +135,13 @@ export class StatsGenerator {
 	                <h1>codegroove stats</h1>
 	            </nav>
 	        <main>
-	            <section class="section__container">
+	            <section class="section__container" data=${JSON.stringify(
+					data.flat(),
+				)}>
 	                ${chartContainers.join('')}
 	            </section>
 	        </main>
 	    </body>
 	    </html>`;
-	}
-
-	getChartConfiguration(type: string, data: any, index: any) {
-		return `
-	    new Chart(
-	      document.getElementById('chart${index + 1}'),
-	      {
-	        type: ${type},
-	        data: {
-	          labels: ${Object.keys(data)}.map(row => row),
-	          datasets: [
-	            {
-	              label: 'Acquisitions by year',
-	              data: ${Object.values(data)}.map(row => row),
-	            },
-	          ],
-	        },
-	      }
-	    );
-        `;
 	}
 }
