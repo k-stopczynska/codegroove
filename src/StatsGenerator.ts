@@ -32,10 +32,25 @@ export class StatsGenerator {
 			const content = await vscode.workspace.fs.readFile(dataPath);
 			const contentString = Buffer.from(content).toString();
 			const jsonData = JSON.parse(contentString);
-			const sessions = this.filterDates(jsonData);
-			const durations = sessions.map((session) =>
-				this.getDurationPerProjectAndPerLanguage(session),
+			const [dailySessions, monthlySessions, yearlySessions] =
+				this.filterDates(jsonData);
+			const dailyDurations = this.getDurationPerProjectAndPerLanguage(
+				dailySessions,
+				'daily',
 			);
+			const monthlyDurations = this.getDurationPerProjectAndPerLanguage(
+				monthlySessions,
+				'monthly',
+			);
+			const yearlyDurations = this.getDurationPerProjectAndPerLanguage(
+				yearlySessions,
+				'yearly',
+			);
+			const durations = [
+				dailyDurations,
+				monthlyDurations,
+				yearlyDurations,
+			];
 			return durations;
 		} catch (error) {
 			console.error('Error fetching data:', error);
@@ -67,7 +82,7 @@ export class StatsGenerator {
 		return [dailySessions, monthlySessions, yearlySessions];
 	}
 
-	getDurationPerProjectAndPerLanguage(data: Session[]) {
+	getDurationPerProjectAndPerLanguage(data: Session[], chunk: string) {
 		const durationInChunks: any = { type: 'line' };
 		const durationPerProject: any = { type: 'bar' };
 		const durationPerLanguage: any = { type: 'doughnut' };
@@ -87,19 +102,31 @@ export class StatsGenerator {
 			}
 			durationPerLanguage[entry.language] += totalSeconds;
 
-			// TODO: make it only filter by day and month if proper list is provided
-			if (data[1] !== undefined) {
+			if (chunk === 'daily') {
+				const startHour = new Date(entry.start).getHours();
+				const endHour =
+					new Date(entry.start).getHours() +
+					Math.ceil(+totalSeconds / 3600);
+
+				for (let hour = startHour; hour <= endHour; hour++) {
+					if (!durationInChunks[hour]) {
+						durationInChunks[hour] = 0;
+					}
+					durationInChunks[hour] +=
+						+totalSeconds / (endHour - startHour + 1);
+				}
+			}
+
+			if (chunk === 'monthly') {
 				const dayKey = new Date(entry.start).getDate();
-				console.log('day key', dayKey);
 				if (!durationInChunks[dayKey]) {
 					durationInChunks[dayKey] = 0;
 				}
 				durationInChunks[dayKey] += totalSeconds;
 			}
 
-			if (data[2] !== undefined) {
-				const monthKey = new Date(entry.start).getMonth();
-				console.log('months', monthKey);
+			if (chunk === 'yearly') {
+				const monthKey = new Date(entry.start).getMonth() + 1;
 				if (!durationInChunks[monthKey]) {
 					durationInChunks[monthKey] = 0;
 				}
@@ -120,7 +147,7 @@ export class StatsGenerator {
 		return fileSrc;
 	}
 
-	generateChartsHtml(data: Session[][]): string {
+	generateChartsHtml(data: any): string {
 		const logoSrc = this.getFileSrc('assets', 'codegroove.png');
 		const styleSrc = this.getFileSrc('src', 'styles.css');
 		const chartScriptSrc = this.getFileSrc('src', 'charts.js');
