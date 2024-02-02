@@ -68,8 +68,8 @@ export class StatsGenerator {
 	}
 
 	getDurationPerProjectAndPerLanguage(data: Session[]) {
-		const durationPerProject: any = {};
-		const durationPerLanguage: any = {};
+		const durationPerProject: any = { type: 'bar' };
+		const durationPerLanguage: any = { type: 'doughnut' };
 		data.forEach((entry: Session) => {
 			const totalSeconds =
 				+entry.duration.hours * 3600 +
