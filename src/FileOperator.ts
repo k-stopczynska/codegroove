@@ -1,7 +1,5 @@
 import * as vscode from 'vscode';
-const fs = require('fs');
-const path = require('path');
-
+import * as fs from 'fs';
 import { Session } from './types';
 
 export class FileOperator {
@@ -55,16 +53,19 @@ export class FileOperator {
 			extensionStoragePath,
 			'stats.json',
 		);
-
+		const content = JSON.stringify(updatedData);
 		try {
-			const content = JSON.stringify(updatedData, null, 2);
 			await vscode.workspace.fs.writeFile(
 				jsonFilePath,
 				Buffer.from(content),
 			);
-			console.log('JSON file updated successfully');
+			console.log('JSON file updated successfully', content);
 		} catch (error) {
-			console.error('Error updating JSON file:', error);
+			await fs.promises.writeFile(jsonFilePath.fsPath, content);
+			console.error(
+				'Error updating JSON file with vscode, saving through node fs',
+				error,
+			);
 		}
 	}
 }

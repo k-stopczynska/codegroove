@@ -3,10 +3,12 @@ import { CodeTimer } from './CodeTimer';
 import { FileOperator } from './FileOperator';
 import { StatsGenerator } from './StatsGenerator';
 
-const codeTimer = new CodeTimer();
+let codeTimer:any;
+let fileOperator;
 
 export function activate(context: vscode.ExtensionContext) {
-	const fileOperator = new FileOperator(context);
+	codeTimer = new CodeTimer();
+	fileOperator = new FileOperator(context);
 	const statsGenerator = new StatsGenerator(context);
 	codeTimer.init(fileOperator);
 	statsGenerator.init();
@@ -21,6 +23,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(disposable);
 }
 
-export function deactivate() {
-	codeTimer.dispose();
+export async function deactivate() {
+	await codeTimer.dispose();
+	console.log('code timer deactivated');
 }

@@ -15,7 +15,7 @@ export class CodeTimer {
 
 	id = '';
 
-	duration: Duration = {hours: '', minutes: '', seconds: ''};
+	duration: Duration = { hours: '', minutes: '', seconds: '' };
 
 	sessions: Session[] = [];
 
@@ -59,6 +59,7 @@ export class CodeTimer {
 			duration: this.duration,
 		};
 		this.sessions.push(prevSession);
+		console.log('save prev session', this.sessions);
 	}
 
 	setStart(start: string) {
@@ -123,24 +124,27 @@ export class CodeTimer {
 		this.statusBar.show();
 	}
 
-	onProjectChange(event: any) {
-		if (event.focused && event.active) {
+	async onProjectChange(event: any, isDispose: boolean = false) {
+		if ((event.focused && event.active) || isDispose) {
 			const currProj = this.getCurrentProject();
-			if (currProj !== this.project) {
+			if (currProj !== this.project || isDispose) {
 				this.savePreviousSession();
+				await this.fileOperator.saveStats(this.sessions);
+				console.log('stats saved on project change', this.sessions);
 				this.setCurrentProject(currProj);
 				this.setCurrentSession();
 			}
 		}
 	}
 
-	onLangChange() {
+	async onLangChange() {
 		const currLang = this.getCurrentLanguage();
 		if (
 			currLang !== 'No active editor detected' &&
 			currLang !== this.lang
 		) {
 			this.savePreviousSession();
+			await this.fileOperator.saveStats(this.sessions);
 			this.setCurrentLanguage(currLang);
 			this.setCurrentSession();
 		}
@@ -150,12 +154,18 @@ export class CodeTimer {
 		vscode.window.onDidChangeActiveTextEditor(this.onLangChange);
 		vscode.window.onDidChangeWindowState(this.onProjectChange);
 	}
-	// TODO: update daily and total coding time
-	// TODO: create UI with charts as a dashboard
 
 	async dispose() {
-		this.savePreviousSession();
-		await this.fileOperator.saveStats(this.sessions);
-		this.statusBar.dispose();
+		try {
+			await Promise.all([
+				this.onProjectChange({}, true),
+				this.statusBar.dispose(),
+			]);
+			console.log('saving prev session in dispose...', this.sessions);
+
+			console.log('Status bar disposed.');
+		} catch (error) {
+			console.error('Error during disposal:', error);
+		}
 	}
 }
