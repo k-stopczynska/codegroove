@@ -86,27 +86,24 @@ export class StatsGenerator {
 		const durationPerProject: any = { type: 'bar' };
 		const durationPerLanguage: any = { type: 'doughnut' };
 		data.forEach((entry: Session) => {
-			const totalSeconds =
-				+entry.duration.hours * 3600 +
-				+entry.duration.minutes * 60 +
-				entry.duration.seconds;
+			const totalSeconds = entry.duration.seconds;
 
 			if (!durationPerProject[entry.project]) {
 				durationPerProject[entry.project] = 0;
 			}
-			durationPerProject[entry.project] += +totalSeconds / 3600;
+			durationPerProject[entry.project] += totalSeconds / 3600;
 
 			if (!durationPerLanguage[entry.language]) {
 				durationPerLanguage[entry.language] = 0;
 			}
-			durationPerLanguage[entry.language] += +totalSeconds / 3600;
+			durationPerLanguage[entry.language] += totalSeconds / 3600;
 
 			switch (chunk) {
 				case 'daily':
 					const startHour = new Date(entry.start).getHours();
 					const endHour =
 						new Date(entry.start).getHours() +
-						Math.ceil(+totalSeconds / 3600);
+						Math.ceil(totalSeconds / 3600);
 
 					for (let hour = startHour; hour <= endHour; hour++) {
 						if (!durationInChunks[hour]) {
@@ -121,14 +118,14 @@ export class StatsGenerator {
 					if (!durationInChunks[dayKey]) {
 						durationInChunks[dayKey] = 0;
 					}
-					durationInChunks[dayKey] += +totalSeconds / 3600;
+					durationInChunks[dayKey] += totalSeconds / 3600;
 
 				case 'yearly':
 					const monthKey = new Date(entry.start).getMonth() + 1;
 					if (!durationInChunks[monthKey]) {
 						durationInChunks[monthKey] = 0;
 					}
-					durationInChunks[monthKey] += +totalSeconds / 3600;
+					durationInChunks[monthKey] += totalSeconds / 3600;
 			}
 		});
 
