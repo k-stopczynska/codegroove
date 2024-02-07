@@ -20,23 +20,16 @@ export class StatsGenerator {
 
 	async init() {
 		const durations = await this.fetchData();
-		console.log('durations', durations);
 		const chartsHtml = this.generateChartsHtml(durations);
 		this.panel.webview.html = chartsHtml;
 	}
 
 	async fetchData() {
-		const dataPath = vscode.Uri.joinPath(
-			this.context.globalStorageUri,
-			'stats.json',
-		);
-
 		try {
-			// TODO: use FileOperator in here
-			const content = await vscode.workspace.fs.readFile(dataPath);
-			const contentString = Buffer.from(content).toString();
-			const jsonData = JSON.parse(contentString);
-			const stats = await this.fileOperator.readStats();
+			let stats = await this.fileOperator.readStats();
+			stats = stats.filter(
+				(stat: any) => stat.language !== 'No active editor detected',
+			);
 			const [dailySessions, monthlySessions, yearlySessions] =
 				this.filterDates(stats);
 			const dailyDurations = this.getDurationPerProjectAndPerLanguage(
@@ -183,14 +176,7 @@ export class StatsGenerator {
 	            </nav>
 	        <main>
 	            <section class="section__container" data=${JSON.stringify(
-					data
-						.flat()
-						.filter(
-							(item: any) =>
-								!item.hasOwnProperty(
-									'No active editor detected',
-								),
-						),
+					data.flat(),
 				)}>
 	                ${chartContainers.join('')}
 	            </section>
