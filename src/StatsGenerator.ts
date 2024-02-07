@@ -150,9 +150,13 @@ export class StatsGenerator {
 		const chartContainers = data
 			.flat()
 			.map((stat: Session, index: number) => {
-				return `<div class="chart">
+				return `
+					<div class="chart__container">
+						<h2 class="chart__heading">title</h2>
+						<div class="chart">
 	                        <canvas id="chart${index + 1}"></canvas>
-	                    </div>`;
+	                    </div>
+					</div>`;
 			});
 
 		return `
