@@ -41,9 +41,7 @@ export class CodeTimer {
 	}
 
 	private startInactivityTimer() {
-		console.log('starting inactivity timer');
 		this.inactivityTimer = setInterval(() => {
-			console.log(this.inactivityThreshold);
 			this.savePreviousSession();
 			this.fileOperator.saveStats(this.sessions);
 		}, this.inactivityThreshold);
@@ -154,6 +152,7 @@ export class CodeTimer {
 				this.savePreviousSession();
 				await this.fileOperator.saveStats(this.sessions);
 				this.setCurrentProject(currProj);
+				this.handleUserActivity();
 				this.setCurrentSession();
 			}
 		}
@@ -168,6 +167,7 @@ export class CodeTimer {
 			this.savePreviousSession();
 			await this.fileOperator.saveStats(this.sessions);
 			this.setCurrentLanguage(currLang);
+			this.handleUserActivity();
 			this.setCurrentSession();
 		}
 	}
@@ -178,10 +178,7 @@ export class CodeTimer {
 
 	addEventListeners() {
 		vscode.window.onDidChangeActiveTextEditor(this.onLangChange, this);
-		vscode.window.onDidChangeWindowState((event) => {
-			this.onProjectChange(event), this;
-			this.resetInactivityTimer();
-		});
+		vscode.window.onDidChangeWindowState(this.onProjectChange, this);
 		vscode.workspace.onDidChangeTextDocument(this.handleUserActivity, this);
 		vscode.window.onDidChangeTextEditorSelection(
 			this.handleUserActivity,
