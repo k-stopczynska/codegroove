@@ -21,6 +21,9 @@ export class CodeTimer {
 
 	fileOperator: any;
 
+	private inactivityThreshold = 60 * 1000;
+	private inactivityTimer: NodeJS.Timeout | null = null;
+
 	async init(fileOperator: any) {
 		const timer = setInterval(() => this.updateStatusBar(), 1000);
 		this.fileOperator = fileOperator;
@@ -31,9 +34,27 @@ export class CodeTimer {
 		this.setCurrentLanguage(this.getCurrentLanguage());
 		this.setCurrentProject(this.getCurrentProject());
 		this.setCurrentSession();
-		this.onProjectChange = this.onProjectChange.bind(this);
-		this.onLangChange = this.onLangChange.bind(this);
+		this.startInactivityTimer();
+		// this.onProjectChange = this.onProjectChange.bind(this);
+		// this.onLangChange = this.onLangChange.bind(this);
 		this.addEventListeners();
+	}
+
+	private startInactivityTimer() {
+		console.log('starting inactivity timer');
+		this.inactivityTimer = setInterval(() => {
+			console.log(this.inactivityThreshold);
+			this.savePreviousSession();
+			this.fileOperator.saveStats(this.sessions);
+		}, this.inactivityThreshold);
+	}
+
+	private resetInactivityTimer() {
+		console.log(this.inactivityTimer);
+		if (this.inactivityTimer) {
+			clearInterval(this.inactivityTimer);
+			this.startInactivityTimer();
+		}
 	}
 
 	setSessionId(sessionId: string) {
@@ -151,9 +172,57 @@ export class CodeTimer {
 		}
 	}
 
+	private handleUserActivity() {
+		this.resetInactivityTimer();
+	}
+
 	addEventListeners() {
-		vscode.window.onDidChangeActiveTextEditor(this.onLangChange);
-		vscode.window.onDidChangeWindowState(this.onProjectChange);
+		vscode.window.onDidChangeActiveTextEditor(this.onLangChange, this);
+		vscode.window.onDidChangeWindowState((event) => {
+			this.onProjectChange(event), this;
+			this.resetInactivityTimer();
+		});
+		vscode.workspace.onDidChangeTextDocument(this.handleUserActivity, this);
+		vscode.window.onDidChangeTextEditorSelection(
+			this.handleUserActivity,
+			this,
+		);
+		vscode.window.onDidChangeTextEditorVisibleRanges(
+			this.handleUserActivity,
+			this,
+		);
+		vscode.window.onDidChangeTextEditorViewColumn(
+			this.handleUserActivity,
+			this,
+		);
+		vscode.window.onDidChangeTextEditorOptions(
+			this.handleUserActivity,
+			this,
+		);
+		vscode.window.onDidChangeActiveTextEditor(
+			this.handleUserActivity,
+			this,
+		);
+		vscode.window.onDidChangeTextEditorVisibleRanges(
+			this.handleUserActivity,
+			this,
+		);
+		vscode.window.onDidChangeTextEditorSelection(
+			this.handleUserActivity,
+			this,
+		);
+		vscode.window.onDidChangeTextEditorVisibleRanges(
+			this.handleUserActivity,
+			this,
+		);
+		vscode.window.onDidChangeTextEditorViewColumn(
+			this.handleUserActivity,
+			this,
+		);
+		vscode.window.onDidChangeTextEditorOptions(
+			this.handleUserActivity,
+			this,
+		);
 	}
 
 	async dispose() {

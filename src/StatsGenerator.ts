@@ -69,7 +69,7 @@ export class StatsGenerator {
 		const dailySessions = data.filter(
 			(data) => data.start.split('/')[1] === splitted[1],
 		);
-		console.log('daily', dailySessions);
+
 		const monthlySessions = data.filter(
 			(data) => data.start.split('/')[0] === splitted[0],
 		);
