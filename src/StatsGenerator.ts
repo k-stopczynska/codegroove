@@ -150,9 +150,15 @@ export class StatsGenerator {
 		const chartContainers = data
 			.flat()
 			.map((stat: Session, index: number) => {
+				let title;
+				index <= 2
+					? (title = 'daily')
+					: index <= 5
+					? (title = 'monthly')
+					: (title = 'yearly');
 				return `
 					<div class="chart__container">
-						<h2 class="chart__heading">title</h2>
+						<h2 class="chart__heading">${title}</h2>
 						<div class="chart">
 	                        <canvas id="chart${index + 1}"></canvas>
 	                    </div>
