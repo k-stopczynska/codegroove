@@ -35,6 +35,7 @@ export class CodeTimer {
 		this.setCurrentProject(this.getCurrentProject());
 		this.setCurrentSession();
 		this.startInactivityTimer();
+		this.handleUserActivity = this.handleUserActivity.bind(this);
 		// this.onProjectChange = this.onProjectChange.bind(this);
 		// this.onLangChange = this.onLangChange.bind(this);
 		this.addEventListeners();
@@ -44,11 +45,12 @@ export class CodeTimer {
 		this.inactivityTimer = setInterval(() => {
 			this.savePreviousSession();
 			this.fileOperator.saveStats(this.sessions);
+			// TODO: how should it behave when there was no activity for certain period of time? how make it wait for another activity event? which event should start new sess?
+			this.setCurrentSession();
 		}, this.inactivityThreshold);
 	}
 
 	private resetInactivityTimer() {
-		console.log(this.inactivityTimer);
 		if (this.inactivityTimer) {
 			clearInterval(this.inactivityTimer);
 			this.startInactivityTimer();
