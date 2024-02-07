@@ -11,20 +11,23 @@ export class StatsGenerator {
 		},
 	);
 	context: vscode.ExtensionContext;
+	fileOperator: any;
 
-	constructor(context: vscode.ExtensionContext) {
+	constructor(context: vscode.ExtensionContext, fileOperator: any) {
 		this.context = context;
+		this.fileOperator = fileOperator;
 	}
 
 	async init() {
 		const durations = await this.fetchData();
+		console.log('durations', durations);
 		const chartsHtml = this.generateChartsHtml(durations);
 		this.panel.webview.html = chartsHtml;
 	}
 
 	async fetchData() {
 		const dataPath = vscode.Uri.joinPath(
-			this.context.extensionUri,
+			this.context.globalStorageUri,
 			'stats.json',
 		);
 
@@ -33,8 +36,9 @@ export class StatsGenerator {
 			const content = await vscode.workspace.fs.readFile(dataPath);
 			const contentString = Buffer.from(content).toString();
 			const jsonData = JSON.parse(contentString);
+			const stats = await this.fileOperator.readStats();
 			const [dailySessions, monthlySessions, yearlySessions] =
-				this.filterDates(jsonData);
+				this.filterDates(stats);
 			const dailyDurations = this.getDurationPerProjectAndPerLanguage(
 				dailySessions,
 				'daily',
@@ -72,6 +76,7 @@ export class StatsGenerator {
 		const dailySessions = data.filter(
 			(data) => data.start.split('/')[1] === splitted[1],
 		);
+		console.log('daily', dailySessions);
 		const monthlySessions = data.filter(
 			(data) => data.start.split('/')[0] === splitted[0],
 		);
@@ -178,7 +183,14 @@ export class StatsGenerator {
 	            </nav>
 	        <main>
 	            <section class="section__container" data=${JSON.stringify(
-					data.flat(),
+					data
+						.flat()
+						.filter(
+							(item: any) =>
+								!item.hasOwnProperty(
+									'No active editor detected',
+								),
+						),
 				)}>
 	                ${chartContainers.join('')}
 	            </section>
