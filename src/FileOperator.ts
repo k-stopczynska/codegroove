@@ -37,6 +37,7 @@ export class FileOperator {
 				);
 				const jsonData = JSON.parse(content.toString());
 				console.log('Read JSON data:', jsonData);
+				return jsonData;
 			} else {
 				console.log('File not found. Creating a new one.');
 				const newData: Session[] = [];

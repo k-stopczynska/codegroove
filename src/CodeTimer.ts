@@ -21,10 +21,11 @@ export class CodeTimer {
 
 	fileOperator: any;
 
-	init(fileOperator: any) {
+	async init(fileOperator: any) {
 		const timer = setInterval(() => this.updateStatusBar(), 1000);
 		this.fileOperator = fileOperator;
-		this.fileOperator.readStats();
+		const stats = await this.fileOperator.readStats();
+		this.sessions.push(stats);
 		this.setCurrentLanguage(this.getCurrentLanguage());
 		this.setCurrentProject(this.getCurrentProject());
 		this.setCurrentSession();
@@ -130,7 +131,6 @@ export class CodeTimer {
 			if (currProj !== this.project || isDispose) {
 				this.savePreviousSession();
 				await this.fileOperator.saveStats(this.sessions);
-				console.log('stats saved on project change', this.sessions);
 				this.setCurrentProject(currProj);
 				this.setCurrentSession();
 			}
@@ -161,9 +161,6 @@ export class CodeTimer {
 				this.onProjectChange({}, true),
 				this.statusBar.dispose(),
 			]);
-			console.log('saving prev session in dispose...', this.sessions);
-
-			console.log('Status bar disposed.');
 		} catch (error) {
 			console.error('Error during disposal:', error);
 		}
