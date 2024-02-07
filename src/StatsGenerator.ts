@@ -29,6 +29,7 @@ export class StatsGenerator {
 		);
 
 		try {
+			// TODO: use FileOperator in here
 			const content = await vscode.workspace.fs.readFile(dataPath);
 			const contentString = Buffer.from(content).toString();
 			const jsonData = JSON.parse(contentString);

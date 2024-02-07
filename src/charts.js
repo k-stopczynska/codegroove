@@ -1,6 +1,5 @@
 (function initializeCharts() {
   const data = JSON.parse(document.querySelector('.section__container').getAttribute('data'));
-  console.log(data);
   data.forEach((stat, index) => {
     new Chart(
       document.getElementById('chart' + (index + 1)),

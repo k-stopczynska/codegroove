@@ -15,7 +15,7 @@ export class CodeTimer {
 
 	id = '';
 
-	duration: Duration = { hours: '', minutes: '', seconds: '' };
+	duration: Duration = { hours: 0, minutes: 0, seconds: 0 };
 
 	sessions: Session[] = [];
 
@@ -25,7 +25,9 @@ export class CodeTimer {
 		const timer = setInterval(() => this.updateStatusBar(), 1000);
 		this.fileOperator = fileOperator;
 		const stats = await this.fileOperator.readStats();
-		this.sessions.push(stats);
+		if (stats[0].project !== '') {
+			this.sessions.push(...stats);
+		}
 		this.setCurrentLanguage(this.getCurrentLanguage());
 		this.setCurrentProject(this.getCurrentProject());
 		this.setCurrentSession();
@@ -38,7 +40,7 @@ export class CodeTimer {
 		this.id = sessionId;
 	}
 
-	setDuration(duration: any) {
+	setDuration(duration: Duration) {
 		this.duration = duration;
 	}
 
@@ -60,7 +62,6 @@ export class CodeTimer {
 			duration: this.duration,
 		};
 		this.sessions.push(prevSession);
-		console.log('save prev session', this.sessions);
 	}
 
 	setStart(start: string) {

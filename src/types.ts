@@ -1,7 +1,7 @@
 export interface Duration {
-	hours: string;
-	minutes: string;
-	seconds: string;
+	hours: number;
+	minutes: number;
+	seconds: number;
 }
 
 export interface Session {

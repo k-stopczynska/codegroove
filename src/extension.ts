@@ -3,7 +3,7 @@ import { CodeTimer } from './CodeTimer';
 import { FileOperator } from './FileOperator';
 import { StatsGenerator } from './StatsGenerator';
 
-let codeTimer:any;
+let codeTimer: any;
 let fileOperator;
 
 export function activate(context: vscode.ExtensionContext) {
@@ -11,7 +11,7 @@ export function activate(context: vscode.ExtensionContext) {
 	fileOperator = new FileOperator(context);
 	const statsGenerator = new StatsGenerator(context);
 	codeTimer.init(fileOperator);
-	statsGenerator.init();
+	// statsGenerator.init();
 
 	let disposable = vscode.commands.registerCommand(
 		'codegroove.runCodegroove',
@@ -25,5 +25,4 @@ export function activate(context: vscode.ExtensionContext) {
 
 export async function deactivate() {
 	await codeTimer.dispose();
-	console.log('code timer deactivated');
 }
