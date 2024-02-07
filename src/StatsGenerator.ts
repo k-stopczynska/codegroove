@@ -64,6 +64,8 @@ export class StatsGenerator {
 
 	filterDates(data: Session[]) {
 		const currTime = this.getCurrentTime();
+
+		// TODO: change splitting dates for get methods on data
 		const splitted = currTime.split('/');
 
 		const dailySessions = data.filter(

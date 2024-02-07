@@ -1,5 +1,4 @@
-
-  (function initializeCharts() {
+(function initializeCharts() {
   const data = JSON.parse(document.querySelector('.section__container').getAttribute('data'));
   data.forEach((stat, index) => {
     new Chart(

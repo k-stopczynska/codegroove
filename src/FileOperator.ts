@@ -60,7 +60,6 @@ export class FileOperator {
 				jsonFilePath,
 				Buffer.from(content),
 			);
-			console.log('JSON file updated successfully', content);
 		} catch (error) {
 			await fs.promises.writeFile(jsonFilePath.fsPath, content);
 			console.error(

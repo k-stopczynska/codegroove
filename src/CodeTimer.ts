@@ -4,23 +4,17 @@ import { Session, Duration } from './types';
 
 export class CodeTimer {
 	start = '';
-
 	statusBar = vscode.window.createStatusBarItem(
 		vscode.StatusBarAlignment.Left,
 	);
-
 	project = '';
-
 	lang = '';
-
 	id = '';
-
 	duration: Duration = { hours: 0, minutes: 0, seconds: 0 };
-
 	sessions: Session[] = [];
-
 	fileOperator: any;
 
+	// TODO: change this to 15 minutes instead of 1 min after tests
 	private inactivityThreshold = 60 * 1000;
 	private inactivityTimer: NodeJS.Timeout | null = null;
 
@@ -36,8 +30,6 @@ export class CodeTimer {
 		this.setCurrentSession();
 		this.startInactivityTimer();
 		this.handleUserActivity = this.handleUserActivity.bind(this);
-		// this.onProjectChange = this.onProjectChange.bind(this);
-		// this.onLangChange = this.onLangChange.bind(this);
 		this.addEventListeners();
 	}
 
@@ -162,6 +154,9 @@ export class CodeTimer {
 
 	async onLangChange() {
 		const currLang = this.getCurrentLanguage();
+
+	//TODO: make it retry to get language when 'no active editor detected' is returned
+
 		if (
 			currLang !== 'No active editor detected' &&
 			currLang !== this.lang
