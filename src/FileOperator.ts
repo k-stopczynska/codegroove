@@ -52,11 +52,7 @@ export class FileOperator {
 	}
 
 	public async saveStats(updatedData: Session[]) {
-		const extensionStoragePath = this.getExtensionStoragePath();
-		const jsonFilePath = vscode.Uri.joinPath(
-			extensionStoragePath,
-			'stats.json',
-		);
+		const jsonFilePath = this.getJsonFilePath();
 		const content = JSON.stringify(updatedData);
 		try {
 			await vscode.workspace.fs.writeFile(
