@@ -20,6 +20,7 @@ export class StatsGenerator {
 
 	async init() {
 		const durations = await this.fetchData();
+		console.log(durations)
 		const chartsHtml = this.generateChartsHtml(durations);
 		this.panel.webview.html = chartsHtml;
 	}

@@ -3,13 +3,22 @@ import * as fs from 'fs';
 import { Session } from './types';
 
 export class FileOperator {
-	private context;
+	context;
 	constructor(context: vscode.ExtensionContext) {
 		this.context = context;
 	}
 
 	private getExtensionStoragePath() {
 		return this.context.globalStorageUri;
+	}
+
+	private getJsonFilePath() {
+		const extensionStoragePath = this.getExtensionStoragePath();
+		const jsonFilePath = vscode.Uri.joinPath(
+			extensionStoragePath,
+			'stats.json',
+		);
+		return jsonFilePath;
 	}
 
 	private async isFileExists(fileUri: vscode.Uri): Promise<boolean> {
@@ -21,13 +30,8 @@ export class FileOperator {
 		}
 	}
 
-	async readStats() {
-		const extensionStoragePath = this.getExtensionStoragePath();
-		const jsonFilePath = vscode.Uri.joinPath(
-			extensionStoragePath,
-			'stats.json',
-		);
-
+	public async readStats() {
+		const jsonFilePath = this.getJsonFilePath();
 		try {
 			const fileExists = await this.isFileExists(jsonFilePath);
 
@@ -39,7 +43,6 @@ export class FileOperator {
 				console.log('Read JSON data:', jsonData);
 				return jsonData;
 			} else {
-				console.log('File not found. Creating a new one.');
 				const newData: Session[] = [];
 				await this.saveStats(newData);
 			}
@@ -48,7 +51,7 @@ export class FileOperator {
 		}
 	}
 
-	async saveStats(updatedData: Session[]) {
+	public async saveStats(updatedData: Session[]) {
 		const extensionStoragePath = this.getExtensionStoragePath();
 		const jsonFilePath = vscode.Uri.joinPath(
 			extensionStoragePath,
@@ -56,8 +59,13 @@ export class FileOperator {
 		);
 		const content = JSON.stringify(updatedData);
 		try {
-			await fs.promises.appendFile(jsonFilePath.fsPath, content);
+			await vscode.workspace.fs.writeFile(
+				jsonFilePath,
+				Buffer.from(content),
+			);
+			console.log('JSON file updated successfully', content);
 		} catch (error) {
+			await fs.promises.writeFile(jsonFilePath.fsPath, content);
 			console.error('Error updating JSON file', error);
 		}
 	}

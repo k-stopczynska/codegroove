@@ -12,13 +12,13 @@ export class CodeTimer {
 	private id = '';
 	private duration: Duration = { hours: 0, minutes: 0, seconds: 0 };
 	private sessions: Session[] = [];
-	protected fileOperator: any;
+	fileOperator: any;
 
 	// TODO: change this to 15 minutes instead of 1 min after tests
 	private inactivityThreshold = 60 * 1000;
 	private inactivityTimer: NodeJS.Timeout | null = null;
 
-	protected async init(fileOperator: any) {
+	public async init(fileOperator: any) {
 		const timer = setInterval(() => this.updateStatusBar(), 1000);
 		this.fileOperator = fileOperator;
 		const stats = await this.fileOperator.readStats();
@@ -155,7 +155,7 @@ export class CodeTimer {
 	async onLangChange() {
 		const currLang = this.getCurrentLanguage();
 
-	//TODO: make it retry to get language when 'no active editor detected' is returned
+		//TODO: make it retry to get language when 'no active editor detected' is returned
 
 		if (
 			currLang !== 'No active editor detected' &&
