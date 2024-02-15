@@ -3,12 +3,12 @@ import * as fs from 'fs';
 import { Session } from './types';
 
 export class FileOperator {
-	context;
+	private context;
 	constructor(context: vscode.ExtensionContext) {
 		this.context = context;
 	}
 
-	getExtensionStoragePath() {
+	private getExtensionStoragePath() {
 		return this.context.globalStorageUri;
 	}
 
@@ -56,16 +56,9 @@ export class FileOperator {
 		);
 		const content = JSON.stringify(updatedData);
 		try {
-			await vscode.workspace.fs.writeFile(
-				jsonFilePath,
-				Buffer.from(content),
-			);
+			await fs.promises.appendFile(jsonFilePath.fsPath, content);
 		} catch (error) {
-			await fs.promises.writeFile(jsonFilePath.fsPath, content);
-			console.error(
-				'Error updating JSON file with vscode, saving through node fs',
-				error,
-			);
+			console.error('Error updating JSON file', error);
 		}
 	}
 }

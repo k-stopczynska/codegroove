@@ -3,22 +3,22 @@ import { v4 } from 'uuid';
 import { Session, Duration } from './types';
 
 export class CodeTimer {
-	start = '';
-	statusBar = vscode.window.createStatusBarItem(
+	private start = '';
+	private statusBar = vscode.window.createStatusBarItem(
 		vscode.StatusBarAlignment.Left,
 	);
-	project = '';
-	lang = '';
-	id = '';
-	duration: Duration = { hours: 0, minutes: 0, seconds: 0 };
-	sessions: Session[] = [];
-	fileOperator: any;
+	private project = '';
+	private lang = '';
+	private id = '';
+	private duration: Duration = { hours: 0, minutes: 0, seconds: 0 };
+	private sessions: Session[] = [];
+	protected fileOperator: any;
 
 	// TODO: change this to 15 minutes instead of 1 min after tests
 	private inactivityThreshold = 60 * 1000;
 	private inactivityTimer: NodeJS.Timeout | null = null;
 
-	async init(fileOperator: any) {
+	protected async init(fileOperator: any) {
 		const timer = setInterval(() => this.updateStatusBar(), 1000);
 		this.fileOperator = fileOperator;
 		const stats = await this.fileOperator.readStats();

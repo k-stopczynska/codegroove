@@ -18,3 +18,7 @@
     );
   });
 })();
+
+export default initializeCharts;
+
+
