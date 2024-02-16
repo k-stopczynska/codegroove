@@ -4,6 +4,7 @@ import { Session, Duration } from './types';
 
 export class CodeTimer {
 	private start = '';
+	private timer: NodeJS.Timeout | undefined = undefined;
 	private statusBar = vscode.window.createStatusBarItem(
 		vscode.StatusBarAlignment.Left,
 	);
@@ -19,12 +20,14 @@ export class CodeTimer {
 	private inactivityTimer: NodeJS.Timeout | null = null;
 
 	public async init(fileOperator: any) {
-		const timer = setInterval(() => this.updateStatusBar(), 1000);
+		this.timer = setInterval(() => this.updateStatusBar(), 1000);
 		this.fileOperator = fileOperator;
 		const stats = await this.fileOperator.readStats();
 		if (stats[0].project !== '') {
 			this.sessions.push(...stats);
 		}
+
+		// Make it retry if curr lang is 'No active....'
 		this.setCurrentLanguage(this.getCurrentLanguage());
 		this.setCurrentProject(this.getCurrentProject());
 		this.setCurrentSession();
@@ -49,23 +52,24 @@ export class CodeTimer {
 		}
 	}
 
-	setSessionId(sessionId: string) {
+	private setSessionId(sessionId: string) {
 		this.id = sessionId;
 	}
 
-	setDuration(duration: Duration) {
+	private setDuration(duration: Duration) {
 		this.duration = duration;
 	}
 
-	setCurrentSession() {
+	private setCurrentSession() {
 		const project = this.project;
 		const language = this.lang;
+		console.log('setting current session', language);
 		this.setSessionId(this.getSessionId());
 		this.setStart(this.getCurrentSessionTime());
 		return { project, language };
 	}
 
-	savePreviousSession() {
+	private savePreviousSession() {
 		this.setDuration(this.getSessionDuration());
 		const prevSession = {
 			project: this.project,
@@ -74,14 +78,15 @@ export class CodeTimer {
 			start: this.start,
 			duration: this.duration,
 		};
+		console.log('saving prev session', this.lang);
 		this.sessions.push(prevSession);
 	}
 
-	setStart(start: string) {
+	private setStart(start: string) {
 		this.start = start;
 	}
 
-	getCurrentProject() {
+	private getCurrentProject() {
 		const folders = vscode.workspace.workspaceFolders;
 		if (folders) {
 			const project = folders[0].name;
@@ -91,11 +96,11 @@ export class CodeTimer {
 		}
 	}
 
-	setCurrentProject(project: string) {
+	private setCurrentProject(project: string) {
 		this.project = project;
 	}
 
-	getCurrentLanguage() {
+	private getCurrentLanguage() {
 		const editor = vscode.window.activeTextEditor;
 		if (editor) {
 			const language = editor.document.languageId;
@@ -105,23 +110,23 @@ export class CodeTimer {
 		}
 	}
 
-	setCurrentLanguage(language: string) {
+	private setCurrentLanguage(language: string) {
 		this.lang = language;
 	}
 
-	getSessionId() {
+	private getSessionId() {
 		const sessionId = v4();
 		return sessionId;
 	}
 
-	getCurrentSessionTime() {
+	private getCurrentSessionTime() {
 		const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 		const date = new Date();
 		const startTime = date.toLocaleString('en-US', { timeZone: timeZone });
 		return startTime;
 	}
 
-	getSessionDuration() {
+	private getSessionDuration() {
 		const startTime = new Date(this.start).getTime();
 		const currentTime = new Date().getTime();
 		const diff = currentTime - startTime;
@@ -131,7 +136,7 @@ export class CodeTimer {
 		return { hours, minutes, seconds };
 	}
 
-	updateStatusBar() {
+	private updateStatusBar() {
 		const timeElapsed = this.getSessionDuration();
 		this.statusBar.text = `CodeGroove elapsed: ${timeElapsed.hours}: ${
 			timeElapsed.minutes % 60
@@ -139,7 +144,7 @@ export class CodeTimer {
 		this.statusBar.show();
 	}
 
-	async onProjectChange(event: any, isDispose: boolean = false) {
+	private async onProjectChange(event: any, isDispose: boolean = false) {
 		if ((event.focused && event.active) || isDispose) {
 			const currProj = this.getCurrentProject();
 			if (currProj !== this.project || isDispose) {
@@ -152,7 +157,7 @@ export class CodeTimer {
 		}
 	}
 
-	async onLangChange() {
+	private async onLangChange() {
 		const currLang = this.getCurrentLanguage();
 
 		//TODO: make it retry to get language when 'no active editor detected' is returned
@@ -173,7 +178,7 @@ export class CodeTimer {
 		this.resetInactivityTimer();
 	}
 
-	addEventListeners() {
+	private addEventListeners() {
 		vscode.window.onDidChangeActiveTextEditor(this.onLangChange, this);
 		vscode.window.onDidChangeWindowState(this.onProjectChange, this);
 		vscode.workspace.onDidChangeTextDocument(this.handleUserActivity, this);
@@ -219,12 +224,13 @@ export class CodeTimer {
 		);
 	}
 
-	async dispose() {
+	public async dispose() {
 		try {
 			await Promise.all([
 				this.onProjectChange({}, true),
 				this.statusBar.dispose(),
 			]);
+			clearInterval(this.timer);
 		} catch (error) {
 			console.error('Error during disposal:', error);
 		}
