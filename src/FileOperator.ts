@@ -40,7 +40,7 @@ export class FileOperator {
 					jsonFilePath,
 				);
 				const jsonData = JSON.parse(content.toString());
-				console.log('Read JSON data:', jsonData);
+				// console.log('Read JSON data:', jsonData);
 				return jsonData;
 			} else {
 				const newData: Session[] = [];
@@ -59,7 +59,7 @@ export class FileOperator {
 				jsonFilePath,
 				Buffer.from(content),
 			);
-			console.log('JSON file updated successfully', content);
+			// console.log('JSON file updated successfully', content);
 		} catch (error) {
 			await fs.promises.writeFile(jsonFilePath.fsPath, content);
 			console.error('Error updating JSON file', error);

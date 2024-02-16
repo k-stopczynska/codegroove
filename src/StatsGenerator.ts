@@ -18,21 +18,22 @@ export class StatsGenerator {
 		this.fileOperator = fileOperator;
 	}
 
-	async init() {
+	public async init() {
 		const durations = await this.fetchData();
-		console.log(durations)
 		const chartsHtml = this.generateChartsHtml(durations);
 		this.panel.webview.html = chartsHtml;
 	}
 
-	async fetchData() {
+	private async fetchData() {
 		try {
 			let stats = await this.fileOperator.readStats();
 			stats = stats.filter(
-				(stat: any) => stat.language !== 'No active editor detected',
+				(stat: Session) =>
+					stat.language !== 'No active editor detected',
 			);
 			const [dailySessions, monthlySessions, yearlySessions] =
 				this.filterDates(stats);
+
 			const dailyDurations = this.getDurationPerProjectAndPerLanguage(
 				dailySessions,
 				'daily',
@@ -50,62 +51,58 @@ export class StatsGenerator {
 				monthlyDurations,
 				yearlyDurations,
 			];
+
 			return durations;
 		} catch (error) {
 			console.error('Error fetching data:', error);
 		}
 	}
 
-	getCurrentTime() {
-		const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-		const date = new Date();
-		const currTime = date.toLocaleString('en-US', { timeZone: timeZone });
-		return currTime;
-	}
-
-	filterDates(data: Session[]) {
-		const currTime = this.getCurrentTime();
-
-		// TODO: change splitting dates for get methods on data
-		const splitted = currTime.split('/');
-
+	private filterDates(data: Session[]) {
 		const dailySessions = data.filter(
-			(data) => data.start.split('/')[1] === splitted[1],
+			(session) =>
+				new Date(session.start).getDate() === new Date().getDate(),
 		);
 
 		const monthlySessions = data.filter(
-			(data) => data.start.split('/')[0] === splitted[0],
+			(session) =>
+				new Date(session.start).getMonth() === new Date().getMonth(),
 		);
 		const yearlySessions = data.filter(
-			(data) =>
-				data.start.split('/')[2].split(',')[0] ===
-				splitted[2].split(',')[0],
+			(session) =>
+				new Date(session.start).getFullYear() ===
+				new Date().getFullYear(),
 		);
+
 		return [dailySessions, monthlySessions, yearlySessions];
 	}
 
-	getDurationPerProjectAndPerLanguage(data: Session[], chunk: string) {
+	private getDurationPerProjectAndPerLanguage(
+		data: Session[],
+		chunk: string,
+	) {
 		const durationInChunks: any = { type: 'line' };
 		const durationPerProject: any = { type: 'bar' };
 		const durationPerLanguage: any = { type: 'doughnut' };
-		data.forEach((entry: Session) => {
-			const totalSeconds = entry.duration.seconds;
 
-			if (!durationPerProject[entry.project]) {
-				durationPerProject[entry.project] = 0;
-			}
-			durationPerProject[entry.project] += totalSeconds / 3600;
+		data.forEach((session: Session) => {
+			const totalSeconds = session.duration.seconds;
 
-			if (!durationPerLanguage[entry.language]) {
-				durationPerLanguage[entry.language] = 0;
+			if (!durationPerProject[session.project]) {
+				durationPerProject[session.project] = 0;
 			}
-			durationPerLanguage[entry.language] += totalSeconds / 3600;
+			durationPerProject[session.project] += totalSeconds / 3600;
+
+			if (!durationPerLanguage[session.language]) {
+				durationPerLanguage[session.language] = 0;
+			}
+			durationPerLanguage[session.language] += totalSeconds / 3600;
 
 			switch (chunk) {
 				case 'daily':
-					const startHour = new Date(entry.start).getHours();
+					const startHour = new Date(session.start).getHours();
 					const endHour =
-						new Date(entry.start).getHours() +
+						new Date(session.start).getHours() +
 						Math.ceil(totalSeconds / 3600);
 
 					for (let hour = startHour; hour <= endHour; hour++) {
@@ -117,14 +114,14 @@ export class StatsGenerator {
 					}
 
 				case 'monthly':
-					const dayKey = new Date(entry.start).getDate();
+					const dayKey = new Date(session.start).getDate();
 					if (!durationInChunks[dayKey]) {
 						durationInChunks[dayKey] = 0;
 					}
 					durationInChunks[dayKey] += totalSeconds / 3600;
 
 				case 'yearly':
-					const monthKey = new Date(entry.start).getMonth() + 1;
+					const monthKey = new Date(session.start).getMonth() + 1;
 					if (!durationInChunks[monthKey]) {
 						durationInChunks[monthKey] = 0;
 					}
@@ -135,7 +132,7 @@ export class StatsGenerator {
 		return [durationInChunks, durationPerProject, durationPerLanguage];
 	}
 
-	getFileSrc(pathDir: string, pathFile: string): vscode.Uri {
+	private getFileSrc(pathDir: string, pathFile: string): vscode.Uri {
 		const path = vscode.Uri.joinPath(
 			this.context.extensionUri,
 			pathDir,
@@ -145,7 +142,7 @@ export class StatsGenerator {
 		return fileSrc;
 	}
 
-	generateChartsHtml(data: any): string {
+	private generateChartsHtml(data: any): string {
 		const logoSrc = this.getFileSrc('assets', 'codegroove.png');
 		const styleSrc = this.getFileSrc('src', 'styles.css');
 		const chartScriptSrc = this.getFileSrc('src', 'charts.js');
