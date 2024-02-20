@@ -15,8 +15,7 @@ export class CodeTimer {
 	private sessions: Session[] = [];
 	fileOperator: any;
 
-	// TODO: change this to 15 minutes instead of 1 min after tests
-	private inactivityThreshold = 60 * 1000;
+	private inactivityThreshold = 15 * 60 * 1000;
 	private inactivityTimer: NodeJS.Timeout | null = null;
 
 	public async init(fileOperator: any) {
@@ -26,22 +25,23 @@ export class CodeTimer {
 		if (stats[0].project !== '') {
 			this.sessions.push(...stats);
 		}
-
-		// Make it retry if curr lang is 'No active....'
-		this.setCurrentLanguage(this.getCurrentLanguage());
-		this.setCurrentProject(this.getCurrentProject());
 		this.setCurrentSession();
 		this.startInactivityTimer();
 		this.handleUserActivity = this.handleUserActivity.bind(this);
 		this.addEventListeners();
+		if (this.lang === 'No active editor detected') {
+			setTimeout(
+				() => this.setCurrentLanguage(this.getCurrentLanguage()),
+				5000,
+			);
+		}
 	}
 
 	private startInactivityTimer() {
 		this.inactivityTimer = setInterval(() => {
 			this.savePreviousSession();
 			this.fileOperator.saveStats(this.sessions);
-			// TODO: how should it behave when there was no activity for certain period of time? how make it wait for another activity event? which event should start new sess?
-			this.setCurrentSession();
+			// TODO: this shouldn't start another session, next event should, set property isInSession to track the state of an app
 		}, this.inactivityThreshold);
 	}
 
@@ -61,12 +61,10 @@ export class CodeTimer {
 	}
 
 	private setCurrentSession() {
-		const project = this.project;
-		const language = this.lang;
-		console.log('setting current session', language);
-		this.setSessionId(this.getSessionId());
 		this.setStart(this.getCurrentSessionTime());
-		return { project, language };
+		this.setSessionId(this.getSessionId());
+		this.setCurrentProject(this.getCurrentProject());
+		this.setCurrentLanguage(this.getCurrentLanguage());
 	}
 
 	private savePreviousSession() {
@@ -78,7 +76,6 @@ export class CodeTimer {
 			start: this.start,
 			duration: this.duration,
 		};
-		console.log('saving prev session', this.lang);
 		this.sessions.push(prevSession);
 	}
 
@@ -159,12 +156,9 @@ export class CodeTimer {
 
 	private async onLangChange() {
 		const currLang = this.getCurrentLanguage();
-
-		//TODO: make it retry to get language when 'no active editor detected' is returned
-
 		if (
-			currLang !== 'No active editor detected' &&
-			currLang !== this.lang
+			currLang !== this.lang ||
+			this.lang === 'No active editor detected'
 		) {
 			this.savePreviousSession();
 			await this.fileOperator.saveStats(this.sessions);
