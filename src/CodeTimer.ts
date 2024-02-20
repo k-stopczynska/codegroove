@@ -13,13 +13,14 @@ export class CodeTimer {
 	private id = '';
 	private duration: Duration = { hours: 0, minutes: 0, seconds: 0 };
 	private sessions: Session[] = [];
+	private isSessionActive: boolean = true || false;
 	fileOperator: any;
-
-	private inactivityThreshold = 15 * 60 * 1000;
+	private inactivityThreshold = 1 * 60 * 1000;
 	private inactivityTimer: NodeJS.Timeout | null = null;
 
 	public async init(fileOperator: any) {
 		this.timer = setInterval(() => this.updateStatusBar(), 1000);
+		this.isSessionActive = true;
 		this.fileOperator = fileOperator;
 		const stats = await this.fileOperator.readStats();
 		if (stats[0].project !== '') {
@@ -29,6 +30,7 @@ export class CodeTimer {
 		this.startInactivityTimer();
 		this.handleUserActivity = this.handleUserActivity.bind(this);
 		this.addEventListeners();
+		this.isSessionActive = true;
 		if (this.lang === 'No active editor detected') {
 			setTimeout(
 				() => this.setCurrentLanguage(this.getCurrentLanguage()),
@@ -38,17 +40,23 @@ export class CodeTimer {
 	}
 
 	private startInactivityTimer() {
-		this.inactivityTimer = setInterval(() => {
+		this.inactivityTimer = setTimeout(() => {
 			this.savePreviousSession();
 			this.fileOperator.saveStats(this.sessions);
-			// TODO: this shouldn't start another session, next event should, set property isInSession to track the state of an app
+			this.isSessionActive = false;
+			console.log('threshold ended, and stats are now saved');
 		}, this.inactivityThreshold);
 	}
 
 	private resetInactivityTimer() {
 		if (this.inactivityTimer) {
-			clearInterval(this.inactivityTimer);
+			clearTimeout(this.inactivityTimer);
+			console.log('starting inactivity timer again');
 			this.startInactivityTimer();
+			if (!this.isSessionActive) {
+				this.isSessionActive = true;
+				this.setCurrentSession();
+			}
 		}
 	}
 
