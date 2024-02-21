@@ -76,7 +76,7 @@ export class FileOperator {
 			'stats.csv',
 		);
 
-		const content = this.prepareCsvString(updatedData)
+		const content = this.prepareCsvString(updatedData);
 
 		try {
 			await fs.promises.appendFile(csvFilePath.fsPath, content);
@@ -96,7 +96,7 @@ export class FileOperator {
 		});
 	}
 
-	public prepareCsvString(data: Record<string, any>[]) {
+	private prepareCsvString(data: Record<string, any>[]) {
 		const headingsRow = this.columns.join(',');
 		const contentRows = data.map((dataItem) => {
 			return this.prepareDataItem(dataItem).join(',');
