@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
+const csvParser = require('csv-parser');
 import { Session } from './types';
 
 export class FileOperator {
@@ -14,13 +15,13 @@ export class FileOperator {
 		return this.context.globalStorageUri;
 	}
 
-	private getJsonFilePath() {
+	private getCsvFilePath() {
 		const extensionStoragePath = this.getExtensionStoragePath();
-		const jsonFilePath = vscode.Uri.joinPath(
+		const csvFilePath = vscode.Uri.joinPath(
 			extensionStoragePath,
-			'stats.json',
+			'stats.csv',
 		);
-		return jsonFilePath;
+		return csvFilePath;
 	}
 
 	private async isFileExists(fileUri: vscode.Uri): Promise<boolean> {
@@ -32,50 +33,52 @@ export class FileOperator {
 		}
 	}
 
-	public async readStats() {
-		const jsonFilePath = this.getJsonFilePath();
-		try {
-			const fileExists = await this.isFileExists(jsonFilePath);
-
-			if (fileExists) {
-				const content = await vscode.workspace.fs.readFile(
-					jsonFilePath,
-				);
-				const jsonData = JSON.parse(content.toString());
-				// console.log('Read JSON data:', jsonData);
-				return jsonData;
-			} else {
-				const newData: Session[] = [];
-				await this.saveStats(newData);
-			}
-		} catch (error) {
-			console.error('Error reading JSON file:', error);
-		}
-	}
-
-	// public async saveStats(updatedData: Session[]) {
+	// public async readStats() {
 	// 	const jsonFilePath = this.getJsonFilePath();
-	// 	const content = JSON.stringify(updatedData);
 	// 	try {
-	// 		await vscode.workspace.fs.writeFile(
-	// 			jsonFilePath,
-	// 			Buffer.from(content),
-	// 		);
-	// 		// console.log('JSON file updated successfully', content);
+	// 		const fileExists = await this.isFileExists(jsonFilePath);
+
+	// 		if (fileExists) {
+	// 			const content = await vscode.workspace.fs.readFile(
+	// 				jsonFilePath,
+	// 			);
+	// 			const jsonData = JSON.parse(content.toString());
+	// 			// console.log('Read JSON data:', jsonData);
+	// 			return jsonData;
+	// 		} else {
+	// 			const newData: Session[] = [];
+	// 			await this.saveStats(newData);
+	// 		}
 	// 	} catch (error) {
-	// 		await fs.promises.writeFile(jsonFilePath.fsPath, content);
-	// 		console.error('Error updating JSON file', error);
+	// 		console.error('Error reading JSON file:', error);
 	// 	}
 	// }
 
-	public async saveStats(updatedData: Session[]) {
-		// get file path for csv
-		const extensionStoragePath = this.getExtensionStoragePath();
-		const csvFilePath = vscode.Uri.joinPath(
-			extensionStoragePath,
-			'stats.csv',
-		);
+	public async readStats() {
+		const csvData: Session[] = [];
 
+		const csvFilePath = this.getCsvFilePath();
+
+		return new Promise((resolve, reject) => {
+			const stream = fs.createReadStream(csvFilePath.fsPath, 'utf-8');
+
+			stream
+				.pipe(csvParser())
+				.on('data', (row: any) => {
+					csvData.push(row);
+				})
+				.on('end', () => {
+					resolve(csvData);
+					console.log(csvData);
+				})
+				.on('error', (error: any) => {
+					reject(error);
+				});
+		});
+	}
+
+	public async saveStats(updatedData: Session[]) {
+		const csvFilePath = this.getCsvFilePath();
 		const content = this.prepareCsvString(updatedData);
 
 		try {
