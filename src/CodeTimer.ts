@@ -48,7 +48,7 @@ export class CodeTimer {
 		if (this.inactivityTimer) {
 			clearTimeout(this.inactivityTimer);
 			this.startInactivityTimer();
-			console.log(this.isSessionActive)
+			console.log('before setting new session', this.isSessionActive);
 			if (!this.isSessionActive) {
 				this.isSessionActive = true;
 				this.setCurrentSession();
@@ -149,8 +149,10 @@ export class CodeTimer {
 		if ((event.focused && event.active) || isDispose) {
 			const currProj = this.getCurrentProject();
 			if (currProj !== this.project || isDispose) {
-				this.savePreviousSession();
-				await this.fileOperator.saveStats(this.sessions);
+				if (this.isSessionActive) {
+					this.savePreviousSession();
+					await this.fileOperator.saveStats(this.sessions);
+				}
 				this.setCurrentProject(currProj);
 				this.handleUserActivity();
 				this.setCurrentSession();
@@ -161,11 +163,10 @@ export class CodeTimer {
 	private async onLangChange() {
 		const currLang = this.getCurrentLanguage();
 		if (
-			currLang !== this.lang ||
-			this.lang === 'No active editor detected'
+			(currLang !== this.lang && this.isSessionActive) ||
+			(this.lang === 'No active editor detected' && this.isSessionActive)
 		) {
 			this.savePreviousSession();
-			await this.fileOperator.saveStats(this.sessions);
 			this.setCurrentLanguage(currLang);
 			this.handleUserActivity();
 			this.setCurrentSession();
