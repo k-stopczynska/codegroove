@@ -9,5 +9,5 @@ export interface Session {
 	language: string;
 	id: string;
 	start: string;
-	duration: Duration;
+	duration: string | Duration;
 }

@@ -86,7 +86,8 @@ export class StatsGenerator {
 		const durationPerLanguage: any = { type: 'doughnut' };
 
 		data.forEach((session: Session) => {
-			const totalSeconds = session.duration.seconds;
+			const duration = JSON.parse(session.duration as string);
+			const totalSeconds = duration.seconds;
 
 			if (!durationPerProject[session.project]) {
 				durationPerProject[session.project] = 0;
@@ -149,7 +150,7 @@ export class StatsGenerator {
 
 		const chartContainers = data
 			.flat()
-			.map((stat: Session, index: number) => {
+			.map((_: Session, index: number) => {
 				let title;
 				index <= 2
 					? (title = 'daily')

@@ -72,7 +72,6 @@ export class FileOperator {
 				})
 				.on('end', () => {
 					resolve(csvData);
-					console.log(csvData);
 				})
 				.on('error', (error: any) => {
 					reject(error);
