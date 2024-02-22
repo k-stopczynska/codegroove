@@ -11,7 +11,7 @@ export class StatsGenerator {
 		},
 	);
 	context: vscode.ExtensionContext;
-	fileOperator: any;
+	fileOperator;
 
 	constructor(context: vscode.ExtensionContext, fileOperator: any) {
 		this.context = context;
