@@ -1,28 +1,31 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import { CodeTimer } from './CodeTimer';
+import { FileOperator } from './FileOperator';
+import { StatsGenerator } from './StatsGenerator';
+import { FileOperatorInstance } from './types';
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
+let codeTimer: CodeTimer;
+let fileOperator: FileOperatorInstance;
+
 export function activate(context: vscode.ExtensionContext) {
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "codegroove" is now active!');
+	codeTimer = new CodeTimer(fileOperator);
+	fileOperator = new FileOperator(context);
+	codeTimer.init(fileOperator);
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
 	let disposable = vscode.commands.registerCommand(
-		'codegroove.runCodegroove',
+		'codegroove.showStats',
 		() => {
-			// The code you place here will be executed every time your command is executed
-			// Display a message box to the user
-			vscode.window.showInformationMessage('You are running codegroove!');
+			vscode.window.showInformationMessage(
+				'You will see stats in new tab!',
+			);
+			const statsGenerator = new StatsGenerator(context, fileOperator);
+			statsGenerator.init();
 		},
 	);
 
 	context.subscriptions.push(disposable);
 }
 
-// This method is called when your extension is deactivated
-export function deactivate() {}
+export async function deactivate() {
+	await codeTimer.dispose();
+}
