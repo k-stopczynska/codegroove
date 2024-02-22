@@ -77,17 +77,6 @@ export class FileOperator {
 		});
 	}
 
-	public async saveStats(updatedData: Session[]) {
-		const csvFilePath = this.getCsvFilePath();
-		const content = this.prepareCsvString(updatedData);
-
-		try {
-			await fs.promises.appendFile(csvFilePath.fsPath, content);
-		} catch (error) {
-			console.error('Error updating csv file:', error);
-		}
-	}
-
 	private nullToEmptyReplacer(_key: string, value: any) {
 		return null === value ? '' : value;
 	}
@@ -106,5 +95,16 @@ export class FileOperator {
 		});
 		const csvDataString = [headingsRow, ...contentRows].join('\r\n');
 		return csvDataString;
+	}
+
+	public async saveStats(updatedData: Session[]) {
+		const csvFilePath = this.getCsvFilePath();
+		const content = this.prepareCsvString(updatedData);
+
+		try {
+			await fs.promises.appendFile(csvFilePath.fsPath, content);
+		} catch (error) {
+			console.error('Error updating csv file:', error);
+		}
 	}
 }
