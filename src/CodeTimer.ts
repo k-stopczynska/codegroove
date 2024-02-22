@@ -21,10 +21,6 @@ export class CodeTimer {
 	public async init(fileOperator: any) {
 		this.timer = setInterval(() => this.updateStatusBar(), 1000);
 		this.fileOperator = fileOperator;
-		// const stats = await this.fileOperator.readStats();
-		// if (stats[0].project !== '') {
-		// 	this.sessions.push(...stats);
-		// }
 		this.setCurrentSession();
 		this.startInactivityTimer();
 		this.addEventListeners();

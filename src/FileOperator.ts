@@ -38,6 +38,7 @@ export class FileOperator {
 	private async createStatsFileWithHeadings() {
 		const csvFilePath = this.getCsvFilePath();
 		const fileExists = await this.isFileExists(csvFilePath);
+
 		if (fileExists) {
 			return;
 		} else {
@@ -100,8 +101,7 @@ export class FileOperator {
 
 	public async saveStats(updatedData: Session[]) {
 		const csvFilePath = this.getCsvFilePath();
-		const content = this.prepareCsvString(updatedData);
-		await this.createStatsFileWithHeadings();
+		const content = this.prepareCsvString(updatedData) + os.EOL;
 
 		try {
 			await fs.promises.appendFile(csvFilePath.fsPath, content);
