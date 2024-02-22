@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
+import os from 'os';
 const csvParser = require('csv-parser');
 import { Session } from './types';
 
@@ -9,6 +10,7 @@ export class FileOperator {
 
 	constructor(context: vscode.ExtensionContext) {
 		this.context = context;
+		this.readStats();
 	}
 
 	private getExtensionStoragePath() {
@@ -33,31 +35,31 @@ export class FileOperator {
 		}
 	}
 
-	// public async readStats() {
-	// 	const jsonFilePath = this.getJsonFilePath();
-	// 	try {
-	// 		const fileExists = await this.isFileExists(jsonFilePath);
+	private async createStatsFileWithHeadings() {
+		const csvFilePath = this.getCsvFilePath();
+		const fileExists = await this.isFileExists(csvFilePath);
+		if (fileExists) {
+			return;
+		} else {
+			const headingsRow = this.columns.join(',');
+			const content = headingsRow + os.EOL;
 
-	// 		if (fileExists) {
-	// 			const content = await vscode.workspace.fs.readFile(
-	// 				jsonFilePath,
-	// 			);
-	// 			const jsonData = JSON.parse(content.toString());
-	// 			// console.log('Read JSON data:', jsonData);
-	// 			return jsonData;
-	// 		} else {
-	// 			const newData: Session[] = [];
-	// 			await this.saveStats(newData);
-	// 		}
-	// 	} catch (error) {
-	// 		console.error('Error reading JSON file:', error);
-	// 	}
-	// }
+			try {
+				await fs.promises.writeFile(
+					csvFilePath.fsPath,
+					content,
+					'utf-8',
+				);
+			} catch (error) {
+				console.error('Error creating csv file:', error);
+			}
+		}
+	}
 
 	public async readStats() {
 		const csvData: Session[] = [];
-
 		const csvFilePath = this.getCsvFilePath();
+		await this.createStatsFileWithHeadings();
 
 		return new Promise((resolve, reject) => {
 			const stream = fs.createReadStream(csvFilePath.fsPath, 'utf-8');
@@ -89,17 +91,17 @@ export class FileOperator {
 	}
 
 	private prepareCsvString(data: Record<string, any>[]) {
-		const headingsRow = this.columns.join(',');
 		const contentRows = data.map((dataItem) => {
 			return this.prepareDataItem(dataItem).join(',');
 		});
-		const csvDataString = [headingsRow, ...contentRows].join('\r\n');
+		const csvDataString = [...contentRows].join(os.EOL);
 		return csvDataString;
 	}
 
 	public async saveStats(updatedData: Session[]) {
 		const csvFilePath = this.getCsvFilePath();
 		const content = this.prepareCsvString(updatedData);
+		await this.createStatsFileWithHeadings();
 
 		try {
 			await fs.promises.appendFile(csvFilePath.fsPath, content);
