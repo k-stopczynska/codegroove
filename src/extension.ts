@@ -2,12 +2,13 @@ import * as vscode from 'vscode';
 import { CodeTimer } from './CodeTimer';
 import { FileOperator } from './FileOperator';
 import { StatsGenerator } from './StatsGenerator';
+import { FileOperatorInstance } from './types';
 
-let codeTimer: any;
-let fileOperator: any;
+let codeTimer: CodeTimer;
+let fileOperator: FileOperatorInstance;
 
 export function activate(context: vscode.ExtensionContext) {
-	codeTimer = new CodeTimer();
+	codeTimer = new CodeTimer(fileOperator);
 	fileOperator = new FileOperator(context);
 	codeTimer.init(fileOperator);
 

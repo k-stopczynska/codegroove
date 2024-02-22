@@ -2,9 +2,9 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import os from 'os';
 const csvParser = require('csv-parser');
-import { Session } from './types';
+import { Session, FileOperatorInstance } from './types';
 
-export class FileOperator {
+export class FileOperator implements FileOperatorInstance {
 	private columns = ['id', 'project', 'language', 'start', 'duration'];
 	public context;
 

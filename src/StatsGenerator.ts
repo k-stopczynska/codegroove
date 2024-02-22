@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { Session } from './types';
+import { Session, FileOperatorInstance } from './types';
 
 export class StatsGenerator {
 	panel = vscode.window.createWebviewPanel(
@@ -11,9 +11,9 @@ export class StatsGenerator {
 		},
 	);
 	context: vscode.ExtensionContext;
-	fileOperator;
+	fileOperator: FileOperatorInstance;
 
-	constructor(context: vscode.ExtensionContext, fileOperator: any) {
+	constructor(context: vscode.ExtensionContext, fileOperator: FileOperatorInstance) {
 		this.context = context;
 		this.fileOperator = fileOperator;
 	}
@@ -26,7 +26,7 @@ export class StatsGenerator {
 
 	private async fetchData() {
 		try {
-			let stats = await this.fileOperator.readStats();
+			let stats = await this.fileOperator.readStats() as Session[];
 			stats = stats.filter(
 				(stat: Session) =>
 					stat.language !== 'No active editor detected',

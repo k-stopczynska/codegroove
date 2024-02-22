@@ -1,6 +1,12 @@
 import * as vscode from 'vscode';
 import { v4 } from 'uuid';
-import { Session, Duration } from './types';
+import { Session, Duration, FileOperatorInstance } from './types';
+
+interface MyWindowStateEvent {
+	focused?: boolean;
+	active?: boolean;
+	state?: vscode.WindowState;
+}
 
 export class CodeTimer {
 	private start = '';
@@ -14,11 +20,15 @@ export class CodeTimer {
 	private duration: Duration = { hours: 0, minutes: 0, seconds: 0 };
 	private sessions: Session[] = [];
 	private isSessionActive: boolean = true;
-	fileOperator: any;
-	private inactivityThreshold = 1 * 60 * 1000;
+	public fileOperator: FileOperatorInstance;
+	private inactivityThreshold = 15 * 60 * 1000;
 	private inactivityTimer: NodeJS.Timeout | null = null;
 
-	public async init(fileOperator: any) {
+	constructor(fileOperator: FileOperatorInstance) {
+		this.fileOperator = fileOperator;
+	}
+
+	public async init(fileOperator: FileOperatorInstance) {
 		this.timer = setInterval(() => this.updateStatusBar(), 1000);
 		this.fileOperator = fileOperator;
 		this.setCurrentSession();
@@ -140,7 +150,10 @@ export class CodeTimer {
 		this.statusBar.show();
 	}
 
-	private async onProjectChange(event: any, isDispose: boolean = false) {
+	private async onProjectChange(
+		event: MyWindowStateEvent,
+		isDispose: boolean = false,
+	) {
 		if ((event.focused && event.active) || isDispose) {
 			const currProj = this.getCurrentProject();
 			if (currProj !== this.project || isDispose) {
