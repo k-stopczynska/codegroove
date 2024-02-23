@@ -7,6 +7,12 @@ import { FileOperatorInstance } from './types';
 let codeTimer: CodeTimer;
 let fileOperator: FileOperatorInstance;
 
+/**
+ * creates CodeTimer and FileOperator instances on initialization, 
+ * registers "show stats" command for creating and initializing StatsGenerator instance
+ * @param context vs code context where the extension is stored
+ */
+
 export function activate(context: vscode.ExtensionContext) {
 	codeTimer = new CodeTimer(fileOperator);
 	fileOperator = new FileOperator(context);
@@ -25,6 +31,10 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(disposable);
 }
+
+/**
+ * disposes the codeTimer instance on deactivation
+ */
 
 export async function deactivate() {
 	await codeTimer.dispose();
