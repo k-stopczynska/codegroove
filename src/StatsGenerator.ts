@@ -13,10 +13,17 @@ export class StatsGenerator {
 	context: vscode.ExtensionContext;
 	fileOperator: FileOperatorInstance;
 
-	constructor(context: vscode.ExtensionContext, fileOperator: FileOperatorInstance) {
+	constructor(
+		context: vscode.ExtensionContext,
+		fileOperator: FileOperatorInstance,
+	) {
 		this.context = context;
 		this.fileOperator = fileOperator;
 	}
+
+	/**
+	 * fetches data from stats.csv file, generates webview panel with charts' elements
+	 */
 
 	public async init() {
 		const durations = await this.fetchData();
@@ -24,9 +31,14 @@ export class StatsGenerator {
 		this.panel.webview.html = chartsHtml;
 	}
 
+	/**
+	 * uses fileOperator to retrieve data from csv file, and prepares statistics accordingly
+	 * @returns durations of sessions per period/ language/ project
+	 */
+
 	private async fetchData() {
 		try {
-			let stats = await this.fileOperator.readStats() as Session[];
+			let stats = (await this.fileOperator.readStats()) as Session[];
 			stats = stats.filter(
 				(stat: Session) =>
 					stat.language !== 'No active editor detected',
@@ -57,6 +69,11 @@ export class StatsGenerator {
 			console.error('Error fetching data:', error);
 		}
 	}
+	/**
+	 * filters provided data by day/ month/ year
+	 * @param data is an array of sessions
+	 * @returns data filtered by current day/ month/ year
+	 */
 
 	private filterDates(data: Session[]) {
 		const dailySessions = data.filter(
@@ -76,6 +93,13 @@ export class StatsGenerator {
 
 		return [dailySessions, monthlySessions, yearlySessions];
 	}
+
+	/**
+	 * prepares arrays of statistics daily/monthly/yearly per hours spent/ language/ project
+	 * @param data is an array of sessions
+	 * @param chunk is a time-chunk e.g. day/ month/ year for which statistics will be prepared
+	 * @returns duration in hours of coding time for every chunk/ language/ project
+	 */
 
 	private getDurationPerProjectAndPerLanguage(
 		data: Session[],
@@ -133,6 +157,13 @@ export class StatsGenerator {
 		return [durationInChunks, durationPerProject, durationPerLanguage];
 	}
 
+	/**
+	 * prepares webview paths for files based on local files
+	 * @param pathDir directory in which the file exists
+	 * @param pathFile name of the actual file
+	 * @returns webview file path
+	 */
+
 	private getFileSrc(pathDir: string, pathFile: string): vscode.Uri {
 		const path = vscode.Uri.joinPath(
 			this.context.extensionUri,
@@ -143,28 +174,32 @@ export class StatsGenerator {
 		return fileSrc;
 	}
 
+	/**
+	 * generates actual webview html based on statistics data, and passes that data to charts.js script
+	 * @param data sessions' durations filtered by current day/month/year and coding hours/projects/languages
+	 * @returns webview html string
+	 */
+
 	private generateChartsHtml(data: any): string {
 		const logoSrc = this.getFileSrc('assets', 'codegroove.png');
 		const styleSrc = this.getFileSrc('src', 'styles.css');
 		const chartScriptSrc = this.getFileSrc('src', 'charts.js');
 
-		const chartContainers = data
-			.flat()
-			.map((_: Session, index: number) => {
-				let title;
-				index <= 2
-					? (title = 'daily')
-					: index <= 5
-					? (title = 'monthly')
-					: (title = 'yearly');
-				return `
+		const chartContainers = data.flat().map((_: Session, index: number) => {
+			let title;
+			index <= 2
+				? (title = 'daily')
+				: index <= 5
+				? (title = 'monthly')
+				: (title = 'yearly');
+			return `
 					<div class="chart__container">
 						<h2 class="chart__heading">${title}</h2>
 						<div class="chart">
 	                        <canvas id="chart${index + 1}"></canvas>
 	                    </div>
 					</div>`;
-			});
+		});
 
 		return `
 	    <!DOCTYPE html>
