@@ -28,6 +28,13 @@ export class CodeTimer {
 		this.fileOperator = fileOperator;
 	}
 
+	/**
+	 * initializer for the class instance: starts the status bar timer and refreshes it, starts inactivity timer,
+	 * adds listeners, and starts current session, if editor is not active retries to get
+	 * current used  language
+	 * @param fileOperator FileOperator class instance to read and save files
+	 */
+
 	public async init(fileOperator: FileOperatorInstance) {
 		this.timer = setInterval(() => this.updateStatusBar(), 1000);
 		this.fileOperator = fileOperator;
@@ -42,32 +49,109 @@ export class CodeTimer {
 		}
 	}
 
-	private startInactivityTimer() {
-		this.inactivityTimer = setTimeout(() => {
-			this.savePreviousSession();
-			this.fileOperator.saveStats(this.sessions);
-			this.isSessionActive = false;
-		}, this.inactivityThreshold);
+	/**
+	 * creates status bar text and renders it
+	 */
+
+	private updateStatusBar() {
+		const timeElapsed = this.getSessionDuration();
+		this.statusBar.text = `CodeGroove elapsed: ${timeElapsed.hours}: ${
+			timeElapsed.minutes % 60
+		}: ${timeElapsed.seconds % 60}`;
+		this.statusBar.show();
 	}
 
-	private resetInactivityTimer() {
-		if (this.inactivityTimer) {
-			clearTimeout(this.inactivityTimer);
-			this.startInactivityTimer();
-			if (!this.isSessionActive) {
-				this.isSessionActive = true;
-				this.setCurrentSession();
-			}
-		}
+	/**
+	 * creates timestamp for the beginnig of the session
+	 * @returns local start time in en-US format
+	 */
+
+	private getCurrentSessionTime() {
+		const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+		const date = new Date();
+		const startTime = date.toLocaleString('en-US', { timeZone: timeZone });
+		return startTime;
 	}
+
+	/**
+	 * sets the current session start time
+	 * @param start provided start time for the session
+	 */
+
+	private setStart(start: string) {
+		this.start = start;
+	}
+
+	/**
+	 * creates session id usinng uuid library
+	 * @returns unique session id
+	 */
+
+	private getSessionId() {
+		const sessionId = v4();
+		return sessionId;
+	}
+
+	/**
+	 * sets the current session id
+	 * @param sessionId provided id for the session
+	 */
 
 	private setSessionId(sessionId: string) {
 		this.id = sessionId;
 	}
 
-	private setDuration(duration: Duration) {
-		this.duration = duration;
+	/**
+	 * gets current project name from vs code workspace folders
+	 * @returns project name if opened or 'No workspace folder opened' if not
+	 */
+
+	private getCurrentProject() {
+		const folders = vscode.workspace.workspaceFolders;
+		if (folders) {
+			const project = folders[0].name;
+			return project;
+		} else {
+			return 'No workspace folder opened';
+		}
 	}
+
+	/**
+	 * sets the current session project
+	 * @param project provided project name for the session
+	 */
+
+	private setCurrentProject(project: string) {
+		this.project = project;
+	}
+
+	/**
+	 * gets current language from vs code window
+	 * @returns currently used language if there is opened editor or 'No active editor detected' if not
+	 */
+
+	private getCurrentLanguage() {
+		const editor = vscode.window.activeTextEditor;
+		if (editor) {
+			const language = editor.document.languageId;
+			return language;
+		} else {
+			return 'No active editor detected';
+		}
+	}
+
+	/**
+	 * sets the current session language
+	 * @param language provided language of the session
+	 */
+
+	private setCurrentLanguage(language: string) {
+		this.lang = language;
+	}
+
+	/**
+	 * sets current session project, language, id and start time
+	 */
 
 	private setCurrentSession() {
 		this.setStart(this.getCurrentSessionTime());
@@ -75,6 +159,34 @@ export class CodeTimer {
 		this.setCurrentProject(this.getCurrentProject());
 		this.setCurrentLanguage(this.getCurrentLanguage());
 	}
+
+	/**
+	 * calculates the difference between current and start time of the session
+	 * @returns object with hours, minutes and seconds of session time
+	 */
+
+	private getSessionDuration() {
+		const startTime = new Date(this.start).getTime();
+		const currentTime = new Date().getTime();
+		const diff = currentTime - startTime;
+		const seconds = Math.floor(diff / 1000);
+		const minutes = Math.floor(seconds / 60);
+		const hours = Math.floor(minutes / 60);
+		return { hours, minutes, seconds };
+	}
+
+	/**
+	 * sets the current session duration
+	 * @param duration provided duration object of the session
+	 */
+
+	private setDuration(duration: Duration) {
+		this.duration = duration;
+	}
+
+	/**
+	 * saves previous session object into sessions array
+	 */
 
 	private savePreviousSession() {
 		this.setDuration(this.getSessionDuration());
@@ -88,67 +200,11 @@ export class CodeTimer {
 		this.sessions.push(prevSession);
 	}
 
-	private setStart(start: string) {
-		this.start = start;
-	}
-
-	private getCurrentProject() {
-		const folders = vscode.workspace.workspaceFolders;
-		if (folders) {
-			const project = folders[0].name;
-			return project;
-		} else {
-			return 'No workspace folder opened';
-		}
-	}
-
-	private setCurrentProject(project: string) {
-		this.project = project;
-	}
-
-	private getCurrentLanguage() {
-		const editor = vscode.window.activeTextEditor;
-		if (editor) {
-			const language = editor.document.languageId;
-			return language;
-		} else {
-			return 'No active editor detected';
-		}
-	}
-
-	private setCurrentLanguage(language: string) {
-		this.lang = language;
-	}
-
-	private getSessionId() {
-		const sessionId = v4();
-		return sessionId;
-	}
-
-	private getCurrentSessionTime() {
-		const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-		const date = new Date();
-		const startTime = date.toLocaleString('en-US', { timeZone: timeZone });
-		return startTime;
-	}
-
-	private getSessionDuration() {
-		const startTime = new Date(this.start).getTime();
-		const currentTime = new Date().getTime();
-		const diff = currentTime - startTime;
-		const seconds = Math.floor(diff / 1000);
-		const minutes = Math.floor(seconds / 60);
-		const hours = Math.floor(minutes / 60);
-		return { hours, minutes, seconds };
-	}
-
-	private updateStatusBar() {
-		const timeElapsed = this.getSessionDuration();
-		this.statusBar.text = `CodeGroove elapsed: ${timeElapsed.hours}: ${
-			timeElapsed.minutes % 60
-		}: ${timeElapsed.seconds % 60}`;
-		this.statusBar.show();
-	}
+	/**
+	 * closes and saves previous session if was active and starts new one on project change event
+	 * @param event window state vs code window event
+	 * @param isDispose window dispose event
+	 */
 
 	private async onProjectChange(
 		event: MyWindowStateEvent,
@@ -168,6 +224,10 @@ export class CodeTimer {
 		}
 	}
 
+	/**
+	 * closes and saves previous session if was active and starts new one on language change event
+	 */
+
 	private async onLangChange() {
 		const currLang = this.getCurrentLanguage();
 		if (
@@ -181,9 +241,44 @@ export class CodeTimer {
 		}
 	}
 
+	/**
+	 * when inactivityThreshold time is up saves the session and changes the state of session to inactive
+	 */
+
+	private startInactivityTimer() {
+		this.inactivityTimer = setTimeout(() => {
+			this.savePreviousSession();
+			this.fileOperator.saveStats(this.sessions);
+			this.isSessionActive = false;
+		}, this.inactivityThreshold);
+	}
+
+	/**
+	 * resets inactivity timer, clears up side-effects, and starts new active session after inactivity
+	 */
+
+	private resetInactivityTimer() {
+		if (this.inactivityTimer) {
+			clearTimeout(this.inactivityTimer);
+			this.startInactivityTimer();
+			if (!this.isSessionActive) {
+				this.isSessionActive = true;
+				this.setCurrentSession();
+			}
+		}
+	}
+
+	/**
+	 * resets inactivity timer on registered events
+	 */
+
 	private handleUserActivity() {
 		this.resetInactivityTimer();
 	}
+
+	/**
+	 * adds listeners to detect project and language change and track inactivity time
+	 */
 
 	private addEventListeners() {
 		vscode.window.onDidChangeActiveTextEditor(this.onLangChange, this);
@@ -230,6 +325,10 @@ export class CodeTimer {
 			this,
 		);
 	}
+
+	/**
+	 * awaits for all the data to be stored, and dispose status bar before disposing window, clears up side-effects
+	 */
 
 	public async dispose() {
 		try {
