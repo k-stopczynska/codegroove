@@ -145,15 +145,14 @@ suite('CodeTimer Test Suite', () => {
 		expect(codeTimer.lang).to.equal(language);
 	});
 
-	test('calculates correct session duration', async () => {
+	test('calculates correct session duration', (done) => {
 		codeTimer.setStart(codeTimer.getCurrentSessionTime());
-		const resultPromise = new Promise((resolve) => {
-			setTimeout(() => {
-				resolve(codeTimer.getSessionDuration());
-			}, 1000);
-		});
 
-		const result = await resultPromise;
-		expect(result).to.deep.equal({ hours: 0, minutes: 0, seconds: 1 });
+		setTimeout(async () => {
+			const result = await codeTimer.getSessionDuration();
+			expect(result).to.deep.equal({ hours: 0, minutes: 0, seconds: 4 });
+			done();
+		}, 4000);
 	});
+
 });
