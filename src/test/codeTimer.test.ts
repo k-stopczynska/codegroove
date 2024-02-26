@@ -28,7 +28,7 @@ suite('CodeTimer Test Suite', () => {
 	codeTimer = new CodeTimer(fileOperatorMock);
 	const statusBarMock = createMockStatusBar();
 
-	test('it should initialize with default values', async () => {
+	test('it should instantiate with default values', async () => {
 		expect(codeTimer.start).to.equal('');
 		expect(codeTimer.timer).to.be.undefined;
 		expect(codeTimer.id).to.equal('');
