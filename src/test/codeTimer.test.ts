@@ -6,6 +6,7 @@ import { expect } from 'chai';
 import { CodeTimer } from '../CodeTimer';
 import { FileOperator } from '../FileOperator';
 
+
 function createMockExtensionContext(): vscode.ExtensionContext {
 	return mock<vscode.ExtensionContext>();
 }
@@ -61,5 +62,15 @@ suite('CodeTimer Test Suite', () => {
 		expect(codeTimer.sessions).to.deep.equal([]);
 		expect(codeTimer.inactivityThreshold).to.equal(15 * 60 * 1000);
 		expect(codeTimer.inactivityTimer).to.not.be.null;
+	});
+
+	test('should update status bar with elapsed time', () => {
+		const expectedText = 'CodeGroove elapsed: 0:0:1';
+
+		codeTimer.updateStatusBar();
+
+        setTimeout(() => {
+			expect(codeTimer.statusBar.text).to.equal(expectedText);
+		}, 1000);
 	});
 });
