@@ -97,4 +97,11 @@ suite('CodeTimer Test Suite', () => {
 		expect(sessionId).not.to.equal('');
 		expect(sessionId.length).to.equal(36);
 	});
+
+	test('should set correct session id as state', () => {
+		const id = codeTimer.getSessionId();
+		codeTimer.setSessionId(id);
+
+		expect(codeTimer.id).to.equal(id);
+	});
 });
