@@ -133,4 +133,15 @@ suite('CodeTimer Test Suite', () => {
 
 		expect(result).to.equal('No active editor detected');
 	});
+
+	test('shoud return languageid if opened', () => {
+		// TODO: figure out how to mock this behaviour
+	});
+
+	test('should set correct language as state', () => {
+		const language = codeTimer.getCurrentLanguage();
+		codeTimer.setCurrentLanguage(language);
+
+		expect(codeTimer.lang).to.equal(language);
+	});
 });
