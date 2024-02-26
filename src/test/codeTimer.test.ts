@@ -6,7 +6,6 @@ import { expect } from 'chai';
 import { CodeTimer } from '../CodeTimer';
 import { FileOperator } from '../FileOperator';
 
-
 function createMockExtensionContext(): vscode.ExtensionContext {
 	return mock<vscode.ExtensionContext>();
 }
@@ -29,7 +28,7 @@ suite('CodeTimer Test Suite', () => {
 	codeTimer = new CodeTimer(fileOperatorMock);
 	const statusBarMock = createMockStatusBar();
 
-	test('it should instantiate with default values', async () => {
+	test('should instantiate with default values', async () => {
 		expect(codeTimer.start).to.equal('');
 		expect(codeTimer.timer).to.be.undefined;
 		expect(codeTimer.id).to.equal('');
@@ -46,7 +45,7 @@ suite('CodeTimer Test Suite', () => {
 		expect(codeTimer.inactivityTimer).to.be.null;
 	});
 
-	test('it should initialize with proper values', async () => {
+	test('should initialize with proper values', async () => {
 		codeTimer.init(fileOperatorMock);
 		expect(codeTimer.start).to.not.equal('');
 		expect(codeTimer.timer).to.not.be.undefined;
@@ -69,8 +68,19 @@ suite('CodeTimer Test Suite', () => {
 
 		codeTimer.updateStatusBar();
 
-        setTimeout(() => {
+		setTimeout(() => {
 			expect(codeTimer.statusBar.text).to.equal(expectedText);
 		}, 1000);
+	});
+
+	test('should give correct local time in en-US string format', () => {
+		const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+		const date = new Date();
+		const expectedStartTime = date.toLocaleString('en-US', {
+			timeZone: timeZone,
+		});
+		const actualStartTime = codeTimer.getCurrentSessionTime();
+
+		expect(actualStartTime).to.equal(expectedStartTime);
 	});
 });
