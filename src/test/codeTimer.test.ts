@@ -90,4 +90,11 @@ suite('CodeTimer Test Suite', () => {
 
 		expect(codeTimer.start).to.equal(time);
 	});
+
+	test('should create unique, 36 chars length session id', () => {
+		const sessionId = codeTimer.getSessionId();
+
+		expect(sessionId).not.to.equal('');
+		expect(sessionId.length).to.equal(36);
+	});
 });
