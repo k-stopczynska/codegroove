@@ -116,4 +116,21 @@ suite('CodeTimer Test Suite', () => {
 
 		expect(result).to.equal('No workspace folder opened');
 	});
+
+	test('shoud return project folder name if opened', () => {
+		// TODO: figure out how to mock this behaviour
+	});
+
+	test('should set correct project name as state', () => {
+		const project = codeTimer.getCurrentProject();
+		codeTimer.setCurrentProject(project);
+
+		expect(codeTimer.project).to.equal(project);
+	});
+
+	test('should return No active editor detected if not opened', () => {
+		const result = codeTimer.getCurrentLanguage();
+
+		expect(result).to.equal('No active editor detected');
+	});
 });
