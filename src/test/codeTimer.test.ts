@@ -144,4 +144,16 @@ suite('CodeTimer Test Suite', () => {
 
 		expect(codeTimer.lang).to.equal(language);
 	});
+
+	test('calculates correct session duration', async () => {
+		codeTimer.setStart(codeTimer.getCurrentSessionTime());
+		const resultPromise = new Promise((resolve) => {
+			setTimeout(() => {
+				resolve(codeTimer.getSessionDuration());
+			}, 1000);
+		});
+
+		const result = await resultPromise;
+		expect(result).to.deep.equal({ hours: 0, minutes: 0, seconds: 1 });
+	});
 });
