@@ -1,7 +1,7 @@
 import * as assert from 'assert';
 import * as mocha from 'mocha';
 import * as vscode from 'vscode';
-import { mock, when } from 'ts-mockito';
+import { mock, when, anything } from 'ts-mockito';
 import { expect } from 'chai';
 import { CodeTimer } from '../CodeTimer';
 import { FileOperator } from '../FileOperator';
@@ -27,6 +27,12 @@ suite('CodeTimer Test Suite', () => {
 	fileOperatorMock = fileOperator;
 	codeTimer = new CodeTimer(fileOperatorMock);
 	const statusBarMock = createMockStatusBar();
+
+	// TODO: this is not producing mockWorkspace as intended
+	// const vscodeMock = mock<typeof vscode.workspace>();
+	// const mockWorkspace = mock<vscode.WorkspaceConfiguration>();
+	// when(vscodeMock.getConfiguration(anything())).thenReturn(mockWorkspace);
+	// when(mockWorkspace.get(anything())).thenReturn('Project 1');
 
 	test('should instantiate with default values', async () => {
 		expect(codeTimer.start).to.equal('');
@@ -103,5 +109,11 @@ suite('CodeTimer Test Suite', () => {
 		codeTimer.setSessionId(id);
 
 		expect(codeTimer.id).to.equal(id);
+	});
+
+	test('should return No workspace folder opened if not opened', () => {
+		const result = codeTimer.getCurrentProject();
+
+		expect(result).to.equal('No workspace folder opened');
 	});
 });
