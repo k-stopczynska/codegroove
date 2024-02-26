@@ -83,4 +83,11 @@ suite('CodeTimer Test Suite', () => {
 
 		expect(actualStartTime).to.equal(expectedStartTime);
 	});
+
+	test('should set correct local time as start time state', () => {
+		const time = codeTimer.getCurrentSessionTime();
+		codeTimer.setStart(time);
+
+		expect(codeTimer.start).to.equal(time);
+	});
 });
