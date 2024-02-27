@@ -150,16 +150,35 @@ suite('CodeTimer Test Suite', () => {
 
 		setTimeout(async () => {
 			const result = await codeTimer.getSessionDuration();
-			expect(result).to.deep.equal({ hours: 0, minutes: 0, seconds: 4 });
+			expect(result).to.deep.equal({ hours: 0, minutes: 0, seconds: 3 });
 			done();
-		}, 4000);
+		}, 3000);
 	});
 
-		test('should set correct duration as state', () => {
-			const duration = codeTimer.getSessionDuration();
-			codeTimer.setDuration(duration);
+	test('should set correct duration as state', () => {
+		const duration = codeTimer.getSessionDuration();
+		codeTimer.setDuration(duration);
 
-			expect(codeTimer.duration).to.equal(duration);
-		});
+		expect(codeTimer.duration).to.equal(duration);
+	});
 
+	test('should properly add finished session to sessions array', () => {
+		codeTimer.project = 'Project';
+		codeTimer.lang = 'Language';
+		codeTimer.id = 'id';
+		codeTimer.start = '02/27/2024 12:03:00';
+		codeTimer.savePreviousSession();
+		const lastElementIndex = codeTimer.sessions.length - 1;
+
+		expect(codeTimer.sessions[lastElementIndex].id).to.equal('id');
+		expect(codeTimer.sessions[lastElementIndex].project).to.equal(
+			'Project',
+		);
+		expect(codeTimer.sessions[lastElementIndex].start).to.equal(
+			'02/27/2024 12:03:00',
+		);
+		expect(codeTimer.sessions[lastElementIndex].language).to.equal(
+			'Language',
+		);
+	});
 });
