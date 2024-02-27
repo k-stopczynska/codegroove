@@ -1,21 +1,11 @@
-import * as assert from 'assert';
-import * as mocha from 'mocha';
 import * as vscode from 'vscode';
-import { mock, when, anything, verify } from 'ts-mockito';
+import { mock, when } from 'ts-mockito';
 import { expect } from 'chai';
 import { CodeTimer } from '../CodeTimer';
 import { FileOperator } from '../FileOperator';
 
 function createMockExtensionContext(): vscode.ExtensionContext {
 	return mock<vscode.ExtensionContext>();
-}
-
-function createMockStatusBar(): vscode.StatusBarItem {
-	const statusBarMock: vscode.StatusBarItem = mock<vscode.StatusBarItem>();
-
-	when(statusBarMock.show()).thenReturn(undefined);
-
-	return statusBarMock;
 }
 
 suite('CodeTimer Test Suite', () => {
@@ -26,13 +16,6 @@ suite('CodeTimer Test Suite', () => {
 	const fileOperator = new FileOperator(extensionContextMock);
 	fileOperatorMock = fileOperator;
 	codeTimer = new CodeTimer(fileOperatorMock);
-	const statusBarMock = createMockStatusBar();
-
-	// TODO: this is not producing mockWorkspace as intended, try typeof
-	// const vscodeMock = mock<typeof vscode.workspace>();
-	// const mockWorkspace = mock<vscode.WorkspaceConfiguration>();
-	// when(vscodeMock.getConfiguration(anything())).thenReturn(mockWorkspace);
-	// when(mockWorkspace.get(anything())).thenReturn('Project 1');
 
 	test('should instantiate with default values', async () => {
 		expect(codeTimer.start).to.equal('');
@@ -117,10 +100,6 @@ suite('CodeTimer Test Suite', () => {
 		expect(result).to.equal('No workspace folder opened');
 	});
 
-	test('shoud return project folder name if opened', () => {
-		// TODO: figure out how to mock this behaviour
-	});
-
 	test('should set correct project name as state', () => {
 		const project = codeTimer.getCurrentProject();
 		codeTimer.setCurrentProject(project);
@@ -132,10 +111,6 @@ suite('CodeTimer Test Suite', () => {
 		const result = codeTimer.getCurrentLanguage();
 
 		expect(result).to.equal('No active editor detected');
-	});
-
-	test('shoud return languageid if opened', () => {
-		// TODO: figure out how to mock this behaviour
 	});
 
 	test('should set correct language as state', () => {
