@@ -45,6 +45,9 @@ Typescript, chart.js, csv-parser, uuid
 
 ![App Screenshot](https://lh3.googleusercontent.com/pw/ABLVV87s_A5LCpArlYH7_QUWWKTcj_nhD9HtxZss466IKBJm7ha0-bcuOEJtOoD5jn7C8Eb9Oo6YW3mitV1wQ_9AVWQBkySNNkL3KROjf7cPG6slv6tOyTA=w2400)
 
+## Contributions
+Check out CONTRIBUTIONS.md, if you still feel unsure: checkout this link: https://opensource.guide/ or ask a question here: https://github.com/k-stopczynska/codegroove/issues by adding new issue and tagging it as a question
+
 ## Authors
 
 -   [@k-stopczynska](https://www.github.com/k-stopczynska)
