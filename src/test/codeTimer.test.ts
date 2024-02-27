@@ -1,7 +1,7 @@
 import * as assert from 'assert';
 import * as mocha from 'mocha';
 import * as vscode from 'vscode';
-import { mock, when, anything } from 'ts-mockito';
+import { mock, when, anything, verify } from 'ts-mockito';
 import { expect } from 'chai';
 import { CodeTimer } from '../CodeTimer';
 import { FileOperator } from '../FileOperator';
@@ -28,7 +28,7 @@ suite('CodeTimer Test Suite', () => {
 	codeTimer = new CodeTimer(fileOperatorMock);
 	const statusBarMock = createMockStatusBar();
 
-	// TODO: this is not producing mockWorkspace as intended
+	// TODO: this is not producing mockWorkspace as intended, try typeof
 	// const vscodeMock = mock<typeof vscode.workspace>();
 	// const mockWorkspace = mock<vscode.WorkspaceConfiguration>();
 	// when(vscodeMock.getConfiguration(anything())).thenReturn(mockWorkspace);
