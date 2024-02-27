@@ -155,4 +155,11 @@ suite('CodeTimer Test Suite', () => {
 		}, 4000);
 	});
 
+		test('should set correct duration as state', () => {
+			const duration = codeTimer.getSessionDuration();
+			codeTimer.setDuration(duration);
+
+			expect(codeTimer.duration).to.equal(duration);
+		});
+
 });
