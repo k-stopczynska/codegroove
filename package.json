@@ -1,6 +1,7 @@
 {
 	"name": "codegroove",
 	"displayName": "codegroove",
+	"publisher": "codegroove",
 	"description": "codegroove is vscode plugin to track and analyze coding time",
 	"version": "0.0.1",
 	"engines": {
