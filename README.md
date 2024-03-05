@@ -1,71 +1,53 @@
-# codegroove README
+![Logo](https://lh3.googleusercontent.com/pw/ABLVV84c8y_tHsJ5SbllNNGjJGayY5_8zplFezCUcFX9alKM0StPw0L3tNO4U0y--fbx_fuVgp2ZV1SNOsD63ocbZTpWe9icjPCuWJRjLr4pQVzsj9g7jHc=s125-p-k)
 
-This is the README for your extension "codegroove". After writing up a brief description, we recommend including the following sections.
+codegroove is vscode plugin to track and analyze coding time.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+-   Easy to start: no tokens, just install and use
+-   Everything in one place: to see analytics just type Ctrl + Shift + p and "show stats" command
+-   Easy to understand charts with daily/ monthly/ yearly statistics
+-   No overload: just most common coding hours/ languages/ projects
+-   Secure: data is saved locally in vscode global storage directory
+-   Minimal design: current session duration is showed at left-bottom corner of vscode
 
-For example if there is an image subfolder under your extension project workspace:
+## Run Locally
 
-\!\[feature X\]\(images/feature-x.png\)
+Clone the project
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+```bash
+  git clone https://github.com/k-stopczynska/codegroove.git
+```
 
-## Requirements
+Go to the project directory
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+```bash
+  cd codegroove
+```
 
-## Extension Settings
+Install dependencies
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+```bash
+  npm install
+```
 
-For example:
+Start the development plugin
 
-This extension contributes the following settings:
+```bash
+  press F5
+```
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+## Tech Stack
 
-## Known Issues
+Typescript, chart.js, csv-parser, uuid
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+## Screenshots
 
-## Release Notes
+![App Screenshot](https://lh3.googleusercontent.com/pw/ABLVV87s_A5LCpArlYH7_QUWWKTcj_nhD9HtxZss466IKBJm7ha0-bcuOEJtOoD5jn7C8Eb9Oo6YW3mitV1wQ_9AVWQBkySNNkL3KROjf7cPG6slv6tOyTA=w2400)
 
-Users appreciate release notes as you update your extension.
+## Contributions
+Check out CONTRIBUTIONS.md, if you still feel unsure: checkout this link: https://opensource.guide/ or ask a question here: https://github.com/k-stopczynska/codegroove/issues by adding new issue and tagging it as a question
 
-### 1.0.0
+## Authors
 
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+-   [@k-stopczynska](https://www.github.com/k-stopczynska)
