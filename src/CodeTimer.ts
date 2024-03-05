@@ -69,7 +69,10 @@ export class CodeTimer {
 	private getCurrentSessionTime() {
 		const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 		const date = new Date();
-		const startTime = date.toLocaleString('en-US', { timeZone: timeZone });
+		const startTime = date.toLocaleString('en-US', {
+			timeZone: timeZone,
+			hour12: false,
+		});
 		return startTime;
 	}
 
@@ -83,7 +86,7 @@ export class CodeTimer {
 	}
 
 	/**
-	 * creates session id usinng uuid library
+	 * creates session id using uuid library
 	 * @returns unique session id
 	 */
 

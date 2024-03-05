@@ -63,7 +63,6 @@ export class StatsGenerator {
 				monthlyDurations,
 				yearlyDurations,
 			];
-
 			return durations;
 		} catch (error) {
 			console.error('Error fetching data:', error);
@@ -137,6 +136,7 @@ export class StatsGenerator {
 						durationInChunks[hour] +=
 							+totalSeconds / (endHour - startHour + 1) / 3600;
 					}
+					return durationInChunks;
 
 				case 'monthly':
 					const dayKey = new Date(session.start).getDate();
@@ -144,6 +144,7 @@ export class StatsGenerator {
 						durationInChunks[dayKey] = 0;
 					}
 					durationInChunks[dayKey] += totalSeconds / 3600;
+					return durationInChunks;
 
 				case 'yearly':
 					const monthKey = new Date(session.start).getMonth() + 1;
@@ -151,6 +152,7 @@ export class StatsGenerator {
 						durationInChunks[monthKey] = 0;
 					}
 					durationInChunks[monthKey] += totalSeconds / 3600;
+					return durationInChunks;
 			}
 		});
 
