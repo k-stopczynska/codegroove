@@ -63,6 +63,14 @@ export class FileOperator implements FileOperatorInstance {
 		if (fileExists) {
 			return;
 		} else {
+			const directoryUri = vscode.Uri.joinPath(csvFilePath, '..');
+			try {
+				await vscode.workspace.fs.createDirectory(directoryUri);
+			} catch (error) {
+				console.error('Error creating directory:', error);
+				return;
+			}
+
 			const headingsRow = this.columns.join(',');
 			const content = headingsRow + os.EOL;
 
