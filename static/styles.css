@@ -1,0 +1,47 @@
+body.vscode-light {
+	color: inherit;
+}
+
+body.vscode-dark {
+	color: rgb(221, 202, 205);
+}
+
+body.vscode-high-contrast {
+	color: inherit;
+}
+
+.nav__container {
+	display: flex;
+	align-items: center;
+	width: 100svw;
+}
+
+.nav__container h1 {
+	margin: 0 auto;
+	font-size: 3rem;
+	letter-spacing: 0.2rem;
+}
+
+.section__container {
+	max-width: 100svw;
+	min-height: 100svh;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 1rem;
+}
+
+.chart__container:nth-child(2) .chart__heading,
+.chart__container:nth-child(3) .chart__heading,
+.chart__container:nth-child(5) .chart__heading,
+.chart__container:nth-child(6) .chart__heading,
+.chart__container:nth-child(8) .chart__heading,
+.chart__container:nth-child(9) .chart__heading {
+	visibility: hidden;
+}
+
+.chart {
+	background: rgb(221, 202, 205);
+	display: flex;
+	align-items: center;
+	height: 300px;
+}
