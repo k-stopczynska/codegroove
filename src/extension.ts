@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { CodeTimer } from './CodeTimer';
 import { FileOperator } from './FileOperator';
 import { StatsGenerator } from './StatsGenerator';
+import { Config } from './Config';
 import { FileOperatorInstance } from './types';
 
 let codeTimer: CodeTimer;
@@ -35,6 +36,7 @@ export function activate(context: vscode.ExtensionContext) {
 			vscode.window.showInformationMessage(
 				'You will be able to pick your inactivity time!',
 			);
+			const config = new Config();
 		},
 	);
 
