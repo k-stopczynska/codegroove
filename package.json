@@ -31,6 +31,10 @@
 			{
 				"command": "codegroove.showStats",
 				"title": "show stats"
+			},
+			{
+				"command": "codegroove.pickInactivityTime",
+				"title": "pick inactivity time"
 			}
 		]
 	},
