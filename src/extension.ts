@@ -11,6 +11,7 @@ let fileOperator: FileOperatorInstance;
 /**
  * creates CodeTimer and FileOperator instances on initialization,
  * registers "show stats" command for creating and initializing StatsGenerator instance
+ * registers "pick inactivity time" command for creating Config class instance
  * @param context vs code context where the extension is stored
  */
 

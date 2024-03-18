@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
 export class Config {
-	inactivityDropdown: any;
+	private inactivityDropdown: any;
 
 	constructor() {
 		this.inactivityDropdown = vscode.window.showQuickPick(
@@ -11,7 +11,7 @@ export class Config {
 		this.onChange();
 	}
 
-	onChange() {
+	private onChange() {
 		this.inactivityDropdown.then((threshold: string) => {
 			let currentThreshold = 15;
 			switch (threshold) {
@@ -32,15 +32,7 @@ export class Config {
 			}
 			vscode.workspace
 				.getConfiguration('codegroove')
-				.update('inactivityThreshold', currentThreshold, true)
-				.then(() => {
-					console.log(
-						'updated threshold',
-						vscode.workspace
-							.getConfiguration('codegroove')
-							.get('inactivityThreshold'),
-					);
-				})
+				.update('inactivityThreshold', currentThreshold, true);
 		});
 	}
 }
