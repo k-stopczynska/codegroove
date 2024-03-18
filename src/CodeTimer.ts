@@ -21,10 +21,12 @@ export class CodeTimer {
 	private sessions: Session[] = [];
 	private isSessionActive: boolean = true;
 	public fileOperator: FileOperatorInstance;
-	// private inactivityThreshold = 15 * 60 * 1000;
-	private inactivityThreshold = vscode.workspace
-		.getConfiguration('codegroove')
-		.get('inactivityThreshold') as number;
+	private inactivityThreshold =
+		(vscode.workspace
+			.getConfiguration('codegroove')
+			.get('inactivityThreshold') as number) *
+		60 *
+		1000;
 	private inactivityTimer: NodeJS.Timeout | null = null;
 
 	constructor(fileOperator: FileOperatorInstance) {
@@ -252,9 +254,12 @@ export class CodeTimer {
 	 */
 
 	private setInactivityThreshold() {
-		this.inactivityThreshold = vscode.workspace
-			.getConfiguration('codegroove')
-			.get('inactivityThreshold') as number;
+		this.inactivityThreshold =
+			(vscode.workspace
+				.getConfiguration('codegroove')
+				.get('inactivityThreshold') as number) *
+			60 *
+			1000;
 	}
 
 	/**
@@ -343,7 +348,7 @@ export class CodeTimer {
 		vscode.workspace.onDidChangeConfiguration((e) => {
 			if (e.affectsConfiguration('codegroove'))
 				this.setInactivityThreshold();
-				this.resetInactivityTimer();
+			this.resetInactivityTimer();
 		});
 	}
 
