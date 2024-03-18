@@ -6,32 +6,41 @@ export class Config {
 	constructor() {
 		this.inactivityDropdown = vscode.window.showQuickPick(
 			['5mins', '15mins', '30mins', '45mins', '1hour'],
-			{ placeHolder: 'Pick inactivity treshold' },
+			{ placeHolder: 'Pick inactivity threshold' },
 		);
 		this.onChange();
 	}
 
 	onChange() {
-		this.inactivityDropdown.then((treshold: string) => {
-			let currentTreshold = 15;
-			switch (treshold) {
+		this.inactivityDropdown.then((threshold: string) => {
+			let currentThreshold = 15;
+			switch (threshold) {
 				case '5mins':
-					currentTreshold = 5;
+					currentThreshold = 5;
 					break;
 				case '30mins':
-					currentTreshold = 30;
+					currentThreshold = 30;
 					break;
 				case '45mins':
-					currentTreshold = 45;
+					currentThreshold = 45;
 					break;
 				case '1hour':
-					currentTreshold = 60;
+					currentThreshold = 60;
 					break;
 				default:
 					break;
 			}
-			console.log('treshold', treshold);
-			console.log('currentTreshold', currentTreshold);
+			vscode.workspace
+				.getConfiguration('codegroove')
+				.update('inactivityThreshold', currentThreshold, true)
+				.then(() => {
+					console.log(
+						'updated threshold',
+						vscode.workspace
+							.getConfiguration('codegroove')
+							.get('inactivityThreshold'),
+					);
+				})
 		});
 	}
 }
