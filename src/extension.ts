@@ -22,9 +22,6 @@ export function activate(context: vscode.ExtensionContext) {
 	let disposable = vscode.commands.registerCommand(
 		'codegroove.showStats',
 		() => {
-			vscode.window.showInformationMessage(
-				'You will see stats in new tab!',
-			);
 			const statsGenerator = new StatsGenerator(context, fileOperator);
 			statsGenerator.init();
 		},
@@ -33,9 +30,6 @@ export function activate(context: vscode.ExtensionContext) {
 	disposable = vscode.commands.registerCommand(
 		'codegroove.pickInactivityTime',
 		() => {
-			vscode.window.showInformationMessage(
-				'You will be able to pick your inactivity time!',
-			);
 			const config = new Config();
 		},
 	);
