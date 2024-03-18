@@ -8,7 +8,7 @@ let codeTimer: CodeTimer;
 let fileOperator: FileOperatorInstance;
 
 /**
- * creates CodeTimer and FileOperator instances on initialization, 
+ * creates CodeTimer and FileOperator instances on initialization,
  * registers "show stats" command for creating and initializing StatsGenerator instance
  * @param context vs code context where the extension is stored
  */
@@ -26,6 +26,15 @@ export function activate(context: vscode.ExtensionContext) {
 			);
 			const statsGenerator = new StatsGenerator(context, fileOperator);
 			statsGenerator.init();
+		},
+	);
+
+	disposable = vscode.commands.registerCommand(
+		'codegroove.pickInactivityTime',
+		() => {
+			vscode.window.showInformationMessage(
+				'You will be able to pick your inactivity time!',
+			);
 		},
 	);
 
