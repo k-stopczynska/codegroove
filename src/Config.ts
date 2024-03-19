@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
 export class Config {
-	private inactivityDropdown: any;
+	private inactivityDropdown: Thenable<string | undefined>;
 
 	constructor() {
 		this.inactivityDropdown = vscode.window.showQuickPick(
@@ -12,7 +12,7 @@ export class Config {
 	}
 
 	private onChange() {
-		this.inactivityDropdown.then((threshold: string) => {
+		this.inactivityDropdown.then((threshold: string | undefined) => {
 			let currentThreshold = 15;
 			switch (threshold) {
 				case '5mins':

@@ -13,7 +13,7 @@
           labels: Object.keys(stat).filter((item) => item !== 'type'),
           datasets: [
             {
-              label: 'stats per hour',
+              label: 'hours spent',
               data: Object.values(stat).filter((item) => !isNaN(item)),
             },
           ],
