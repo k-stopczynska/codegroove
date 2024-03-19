@@ -348,9 +348,12 @@ export class CodeTimer {
 			this,
 		);
 		vscode.workspace.onDidChangeConfiguration((e) => {
-			if (e.affectsConfiguration('codegroove'))
+			if (e.affectsConfiguration('codegroove')) {
 				this.setInactivityThreshold();
-			this.resetInactivityTimer();
+				this.savePreviousSession();
+				this.handleUserActivity();
+				this.setCurrentSession();
+			}
 		});
 	}
 
