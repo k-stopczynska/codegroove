@@ -59,11 +59,13 @@ export class CodeTimer {
 	 */
 
 	private updateStatusBar() {
-		const timeElapsed = this.getSessionDuration();
-		this.statusBar.text = `CodeGroove elapsed: ${timeElapsed.hours}: ${
-			timeElapsed.minutes % 60
-		}: ${timeElapsed.seconds % 60}`;
-		this.statusBar.show();
+		if (this.isSessionActive) {
+			const timeElapsed = this.getSessionDuration();
+			this.statusBar.text = `codegroove session elapsed: ${
+				timeElapsed.hours
+			}: ${timeElapsed.minutes % 60}: ${timeElapsed.seconds % 60}`;
+			this.statusBar.show();
+		}
 	}
 
 	/**
