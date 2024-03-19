@@ -1,13 +1,31 @@
+:root {
+	--chart-light: rgb(250, 245, 245);
+	--chart-dark: rgb(19, 14, 34);
+	--chart-light-accent: rgb(65, 31, 134);
+	--chart-dark-accent: rgb(187, 41, 137);
+}
+
 body.vscode-light {
-	color: inherit;
+	color: var(--chart-dark);
 }
 
 body.vscode-dark {
-	color: rgb(221, 202, 205);
+	color: var(--chart-light);
 }
 
 body.vscode-high-contrast {
 	color: inherit;
+}
+
+.vscode-light .chart {
+	background-color: var(--chart-light);
+	border: 1px solid var(--chart-dark);
+}
+
+.vscode-dark .chart,
+.vscode-high-contrast .chart {
+	background-color: var(--chart-dark);
+	border: 1px solid var(--chart-light);
 }
 
 .nav__container {
@@ -40,8 +58,9 @@ body.vscode-high-contrast {
 }
 
 .chart {
-	background: rgb(221, 202, 205);
 	display: flex;
 	align-items: center;
 	height: 300px;
+	border-radius: 4px;
+	padding: 0.5rem;
 }
