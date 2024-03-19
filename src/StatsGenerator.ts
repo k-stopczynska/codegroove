@@ -184,8 +184,8 @@ export class StatsGenerator {
 
 	private generateChartsHtml(data: any): string {
 		const logoSrc = this.getFileSrc('assets', 'codegroove.png');
-		const styleSrc = this.getFileSrc('src', 'styles.css');
-		const chartScriptSrc = this.getFileSrc('src', 'charts.js');
+		const styleSrc = this.getFileSrc('static', 'styles.css');
+		const chartScriptSrc = this.getFileSrc('static', 'charts.js');
 
 		const chartContainers = data.flat().map((_: Session, index: number) => {
 			let title;

@@ -2,14 +2,16 @@ import * as vscode from 'vscode';
 import { CodeTimer } from './CodeTimer';
 import { FileOperator } from './FileOperator';
 import { StatsGenerator } from './StatsGenerator';
+import { Config } from './Config';
 import { FileOperatorInstance } from './types';
 
 let codeTimer: CodeTimer;
 let fileOperator: FileOperatorInstance;
 
 /**
- * creates CodeTimer and FileOperator instances on initialization, 
+ * creates CodeTimer and FileOperator instances on initialization,
  * registers "show stats" command for creating and initializing StatsGenerator instance
+ * registers "pick inactivity time" command for creating Config class instance
  * @param context vs code context where the extension is stored
  */
 
@@ -21,11 +23,15 @@ export function activate(context: vscode.ExtensionContext) {
 	let disposable = vscode.commands.registerCommand(
 		'codegroove.showStats',
 		() => {
-			vscode.window.showInformationMessage(
-				'You will see stats in new tab!',
-			);
 			const statsGenerator = new StatsGenerator(context, fileOperator);
 			statsGenerator.init();
+		},
+	);
+
+	disposable = vscode.commands.registerCommand(
+		'codegroove.pickInactivityTime',
+		() => {
+			const config = new Config();
 		},
 	);
 
