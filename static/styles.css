@@ -32,7 +32,8 @@ body.vscode-high-contrast .vscode-dark {
 
 .nav__container h1 {
 	margin: 0 auto;
-	font-size: 3rem;
+	transform: translateX(-40%);
+	font-size: 2rem;
 	letter-spacing: 0.2rem;
 }
 
@@ -59,4 +60,9 @@ body.vscode-high-contrast .vscode-dark {
 	height: 300px;
 	border-radius: 4px;
 	padding: 0.5rem;
+}
+
+.chart__heading {
+	font-weight: 500;
+	letter-spacing: 0.3rem;
 }
