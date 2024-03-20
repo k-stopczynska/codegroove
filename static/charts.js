@@ -28,7 +28,7 @@
             legend: {
               position: 'top',
               labels: {
-                color: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast') ? "rgb(250, 245, 245)" : 'rgb(19, 14, 34)',
+                color: getTickAndLabelColor(),
                 useBorderRadius: true,
                 borderRadius: 4
               }
@@ -40,12 +40,12 @@
           scales: {
             y: {
               ticks: {
-                color: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast') ? "rgb(250, 245, 245)" : 'rgb(19, 14, 34)',
+                color: getTickAndLabelColor(),
               },
             },
             x: {
               ticks: {
-                color: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast') ? "rgb(250, 245, 245)" : 'rgb(19, 14, 34)',
+                color: getTickAndLabelColor(),
               },
             }
           },
@@ -57,11 +57,15 @@
 
 function getColors() {
   return [
-    '#9EA1D4',
+    'rgb(158, 161, 212)',
     'rgb(255, 188, 255)',
-    '#7EC1DF',
-    '#EDF784',
-    '#FD8A8A',
-    '#B0EBEB'
+    'rgb(126, 193, 223)',
+    'rgb(237, 247, 132)',
+    'rgb(253, 138, 138)',
+    'rgb(176, 235, 235)'
   ];
+}
+
+function getTickAndLabelColor() {
+  return document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast') ? "rgb(250, 245, 245)" : 'rgb(19, 14, 34)'
 }

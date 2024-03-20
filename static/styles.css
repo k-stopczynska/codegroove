@@ -13,14 +13,13 @@ body.vscode-high-contrast .vscode-dark {
 	color: var(--chart-light);
 }
 
-.vscode-light .chart,
-.vscode-high-contrast .vscode-light .chart {
+.vscode-light .chart {
 	background-color: var(--chart-light);
 	border: 1px solid var(--chart-dark);
 }
 
 .vscode-dark .chart,
-.vscode-high-contrast .vscode-dark .chart {
+.vscode-high-contrast .chart {
 	background-color: var(--chart-dark);
 	border: 1px solid var(--chart-light);
 }
