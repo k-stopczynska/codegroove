@@ -21,7 +21,12 @@ export class CodeTimer {
 	private sessions: Session[] = [];
 	private isSessionActive: boolean = true;
 	public fileOperator: FileOperatorInstance;
-	private inactivityThreshold = 15 * 60 * 1000;
+	private inactivityThreshold =
+		(vscode.workspace
+			.getConfiguration('codegroove')
+			.get('inactivityThreshold') as number) *
+		60 *
+		1000;
 	private inactivityTimer: NodeJS.Timeout | null = null;
 
 	constructor(fileOperator: FileOperatorInstance) {
@@ -54,11 +59,13 @@ export class CodeTimer {
 	 */
 
 	private updateStatusBar() {
-		const timeElapsed = this.getSessionDuration();
-		this.statusBar.text = `CodeGroove elapsed: ${timeElapsed.hours}: ${
-			timeElapsed.minutes % 60
-		}: ${timeElapsed.seconds % 60}`;
-		this.statusBar.show();
+		if (this.isSessionActive) {
+			const timeElapsed = this.getSessionDuration();
+			this.statusBar.text = `codegroove session elapsed: ${
+				timeElapsed.hours
+			}: ${timeElapsed.minutes % 60}: ${timeElapsed.seconds % 60}`;
+			this.statusBar.show();
+		}
 	}
 
 	/**
@@ -245,6 +252,19 @@ export class CodeTimer {
 	}
 
 	/**
+	 * updates local state of inactivityThreshold based on config workspace
+	 */
+
+	private setInactivityThreshold() {
+		this.inactivityThreshold =
+			(vscode.workspace
+				.getConfiguration('codegroove')
+				.get('inactivityThreshold') as number) *
+			60 *
+			1000;
+	}
+
+	/**
 	 * when inactivityThreshold time is up saves the session and changes the state of session to inactive
 	 */
 
@@ -252,6 +272,7 @@ export class CodeTimer {
 		this.inactivityTimer = setTimeout(() => {
 			this.savePreviousSession();
 			this.fileOperator.saveStats(this.sessions);
+			this.sessions = [];
 			this.isSessionActive = false;
 		}, this.inactivityThreshold);
 	}
@@ -327,6 +348,14 @@ export class CodeTimer {
 			this.handleUserActivity,
 			this,
 		);
+		vscode.workspace.onDidChangeConfiguration((e) => {
+			if (e.affectsConfiguration('codegroove')) {
+				this.setInactivityThreshold();
+				this.savePreviousSession();
+				this.handleUserActivity();
+				this.setCurrentSession();
+			}
+		});
 	}
 
 	/**

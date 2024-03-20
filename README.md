@@ -1,15 +1,21 @@
-![Logo](https://lh3.googleusercontent.com/pw/ABLVV84c8y_tHsJ5SbllNNGjJGayY5_8zplFezCUcFX9alKM0StPw0L3tNO4U0y--fbx_fuVgp2ZV1SNOsD63ocbZTpWe9icjPCuWJRjLr4pQVzsj9g7jHc=s125-p-k)
+![Logo](https://lh3.googleusercontent.com/pw/AP1GczN_ZCfolkrKWiJboP-ocxuhtI3AuSCFSku4ydsPRjTS7i9bipDxcDBVSgkodrOdW40hCKwx4fvhCjAxmeBjnGWbJuLv9Zj9IOoJHP-up0J6wcRpGfI=w2400)
 
 codegroove is vscode plugin to track and analyze coding time.
 
 ## Features
 
 -   Easy to start: no tokens, just install and use
--   Everything in one place: to see analytics just type Ctrl + Shift + p and "show stats" command
+-   Everything in one place: to see analytics just type Ctrl + Shift + P (or click View and Comman Pallette) and "show stats" command
+-   You can choose your inactivity time after which your session will end, type in Ctrl + Shift + P (or click View and Comman Pallette) and "pick inactivity time"
 -   Easy to understand charts with daily/ monthly/ yearly statistics
 -   No overload: just most common coding hours/ languages/ projects
 -   Secure: data is saved locally in vscode global storage directory
 -   Minimal design: current session duration is showed at left-bottom corner of vscode
+
+## Screenshots
+
+![App Screenshot](https://lh3.googleusercontent.com/pw/AP1GczMyF6aQa4iqhI00IhUWBpM5uT3SNoX9rH5-8V8xCtrX2UW2kEcv4TUaRh2h1XjeDj5K5D3zHMW3Txe879pSQB_EEzbCKE1OpeyG-H4JCtcn3ryg0no=w2400)
+![App Screenshot](https://lh3.googleusercontent.com/pw/AP1GczMMPzFYoc9Efs0vqFD1CUx93ZHcTDieRUPIIvZmbjrods4k82JSx1BAlAJaCN53tt1AsVYUnd02N9M8NM5-vrMxxUvv9lMBYihwDuJK6BkfbBIJbME=w2400)
 
 ## Run Locally
 
@@ -41,11 +47,8 @@ Start the development plugin
 
 Typescript, chart.js, csv-parser, uuid
 
-## Screenshots
-
-![App Screenshot](https://lh3.googleusercontent.com/pw/ABLVV87s_A5LCpArlYH7_QUWWKTcj_nhD9HtxZss466IKBJm7ha0-bcuOEJtOoD5jn7C8Eb9Oo6YW3mitV1wQ_9AVWQBkySNNkL3KROjf7cPG6slv6tOyTA=w2400)
-
 ## Contributions
+
 Check out CONTRIBUTIONS.md, if you still feel unsure: checkout this link: https://opensource.guide/ or ask a question here: https://github.com/k-stopczynska/codegroove/issues by adding new issue and tagging it as a question
 
 ## Authors
