@@ -29,8 +29,8 @@
               position: 'top',
               labels: {
                 color: getTickAndLabelColor(),
-                useBorderRadius: true,
-                borderRadius: 4
+                usePointStyle: true,
+                pointStyle: 'rectRounded',
               }
             },
           },
@@ -55,6 +55,15 @@
   });
 })();
 
+Chart.overrides.doughnut.plugins.legend = {
+  labels: {
+    color: 'red', // Customize label color for doughnut chart
+    usePointStyle: true,
+    useBorderRadius: true,
+    borderRadius: 4
+  }
+};
+
 function getColors() {
   return [
     'rgb(158, 161, 212)',
@@ -67,5 +76,5 @@ function getColors() {
 }
 
 function getTickAndLabelColor() {
-  return document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast') ? "rgb(250, 245, 245)" : 'rgb(19, 14, 34)'
+  return document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast') ? 'rgb(250, 245, 245)' : 'rgb(19, 14, 34)'
 }
