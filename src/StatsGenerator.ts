@@ -212,12 +212,12 @@ export class StatsGenerator {
 	        <link rel="stylesheet" href="${styleSrc}">
 	        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
             <script src="${chartScriptSrc}" defer></script>
-	        <title>Code Timer Stats</title>
+	        <title>codegroove statistics</title>
 	    </head>
 	    <body>
 	            <nav class="nav__container">
 	                <img src="${logoSrc}" width="100" />
-	                <h1>codegroove stats</h1>
+	                <h1>statistics</h1>
 	            </nav>
 	        <main>
 	            <section class="section__container" data=${JSON.stringify(

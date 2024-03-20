@@ -1,13 +1,27 @@
-body.vscode-light {
-	color: inherit;
+:root {
+	--chart-light: rgb(250, 245, 245);
+	--chart-dark: rgb(19, 14, 34);
 }
 
-body.vscode-dark {
-	color: rgb(221, 202, 205);
+body.vscode-light,
+body.vscode-high-contrast .vscode-light {
+	color: var(--chart-dark);
 }
 
-body.vscode-high-contrast {
-	color: inherit;
+body.vscode-dark,
+body.vscode-high-contrast .vscode-dark {
+	color: var(--chart-light);
+}
+
+.vscode-light .chart {
+	background-color: var(--chart-light);
+	border: 1px solid var(--chart-dark);
+}
+
+.vscode-dark .chart,
+.vscode-high-contrast .chart {
+	background-color: var(--chart-dark);
+	border: 1px solid var(--chart-light);
 }
 
 .nav__container {
@@ -18,7 +32,8 @@ body.vscode-high-contrast {
 
 .nav__container h1 {
 	margin: 0 auto;
-	font-size: 3rem;
+	transform: translateX(-40%);
+	font-size: 2rem;
 	letter-spacing: 0.2rem;
 }
 
@@ -40,8 +55,14 @@ body.vscode-high-contrast {
 }
 
 .chart {
-	background: rgb(221, 202, 205);
 	display: flex;
 	align-items: center;
 	height: 300px;
+	border-radius: 4px;
+	padding: 0.5rem;
+}
+
+.chart__heading {
+	font-weight: 500;
+	letter-spacing: 0.3rem;
 }

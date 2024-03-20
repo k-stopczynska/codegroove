@@ -272,6 +272,7 @@ export class CodeTimer {
 		this.inactivityTimer = setTimeout(() => {
 			this.savePreviousSession();
 			this.fileOperator.saveStats(this.sessions);
+			this.sessions = [];
 			this.isSessionActive = false;
 		}, this.inactivityThreshold);
 	}
