@@ -1,29 +1,26 @@
 :root {
 	--chart-light: rgb(250, 245, 245);
 	--chart-dark: rgb(19, 14, 34);
-	--chart-light-accent: rgb(65, 31, 134);
-	--chart-dark-accent: rgb(187, 41, 137);
 }
 
-body.vscode-light {
+body.vscode-light,
+body.vscode-high-contrast .vscode-light {
 	color: var(--chart-dark);
 }
 
-body.vscode-dark {
+body.vscode-dark,
+body.vscode-high-contrast .vscode-dark {
 	color: var(--chart-light);
 }
 
-body.vscode-high-contrast {
-	color: inherit;
-}
-
-.vscode-light .chart {
+.vscode-light .chart,
+.vscode-high-contrast .vscode-light .chart {
 	background-color: var(--chart-light);
 	border: 1px solid var(--chart-dark);
 }
 
 .vscode-dark .chart,
-.vscode-high-contrast .chart {
+.vscode-high-contrast .vscode-dark .chart {
 	background-color: var(--chart-dark);
 	border: 1px solid var(--chart-light);
 }
