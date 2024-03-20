@@ -39,14 +39,22 @@
           tension: .3,
           scales: {
             y: {
+              display: stat.type=== 'doughnut' ? false : true,
               ticks: {
                 color: getTickAndLabelColor(),
               },
+              grid: {
+                color: getGridColor(),
+              }
             },
             x: {
+               display: stat.type=== 'doughnut' ? false : true,
               ticks: {
                 color: getTickAndLabelColor(),
               },
+              grid: {
+                color: getGridColor(),
+              }
             }
           },
         }
@@ -54,15 +62,6 @@
     );
   });
 })();
-
-Chart.overrides.doughnut.plugins.legend = {
-  labels: {
-    color: 'red', // Customize label color for doughnut chart
-    usePointStyle: true,
-    useBorderRadius: true,
-    borderRadius: 4
-  }
-};
 
 function getColors() {
   return [
@@ -77,4 +76,8 @@ function getColors() {
 
 function getTickAndLabelColor() {
   return document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast') ? 'rgb(250, 245, 245)' : 'rgb(19, 14, 34)'
+}
+
+function getGridColor() {
+   return document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast') ? 'rgba(250, 245, 245, .2)' : 'rgba(19, 14, 34, .1)'
 }
