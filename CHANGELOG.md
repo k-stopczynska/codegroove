@@ -20,6 +20,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Changed
 
 -   UI for statistics webview and charts
+-   stopped timer in menu bar on saving session after inactivity
 
 ### Fixed
 
