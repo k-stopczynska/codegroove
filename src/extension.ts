@@ -3,6 +3,7 @@ import { CodeTimer } from './CodeTimer';
 import { FileOperator } from './FileOperator';
 import { StatsGenerator } from './StatsGenerator';
 import { Config } from './Config';
+import { Groove } from './Groove';
 import { FileOperatorInstance } from './types';
 
 let codeTimer: CodeTimer;
@@ -32,6 +33,14 @@ export function activate(context: vscode.ExtensionContext) {
 		'codegroove.pickInactivityTime',
 		() => {
 			const config = new Config();
+		},
+	);
+
+	disposable = vscode.commands.registerCommand(
+		'codegroove.playGroove',
+		() => {
+			const groove = new Groove();
+			groove.utubeFetch('http://whatever.com');
 		},
 	);
 

@@ -36,6 +36,10 @@
 			{
 				"command": "codegroove.pickInactivityTime",
 				"title": "pick inactivity time"
+			},
+			{
+				"command": "codegroove.playGroove",
+				"title": "play some music"
 			}
 		],
 		"configuration": {
