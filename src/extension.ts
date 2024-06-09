@@ -40,7 +40,7 @@ export function activate(context: vscode.ExtensionContext) {
 		'codegroove.playGroove',
 		() => {
 			const groove = new Groove();
-			groove.utubeFetch('http://whatever.com');
+			groove.init();
 		},
 	);
 

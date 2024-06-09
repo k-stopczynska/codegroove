@@ -94,12 +94,14 @@
 		"ts-loader": "^9.5.1",
 		"ts-mockito": "^2.6.1",
 		"typescript": "^5.3.3",
-		"webpack": "^5.89.0",
+		"webpack": "^5.91.0",
 		"webpack-cli": "^5.1.4"
 	},
 	"dependencies": {
 		"chart.js": "^4.4.1",
 		"csv-parser": "^3.0.0",
+		"dotenv": "^16.4.5",
+		"dotenv-webpack": "^8.1.0",
 		"uuid": "^9.0.1"
 	}
 }
