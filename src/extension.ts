@@ -39,7 +39,7 @@ export function activate(context: vscode.ExtensionContext) {
 	disposable = vscode.commands.registerCommand(
 		'codegroove.playGroove',
 		() => {
-			const groove = new Groove();
+			const groove = new Groove(context);
 			groove.init();
 		},
 	);
