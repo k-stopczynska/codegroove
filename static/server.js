@@ -5,8 +5,10 @@ const path = require('path');
 const port = 3000;
 
 http.createServer((req, res) => {
-    if (req.url === '/') {
-        fs.readFile(path.join(__dirname, '..','static/index.html'), (err, data) => {
+    const filePath = path.join(__dirname, 'index.html');
+
+    if (req.url.startsWith('/')) {
+        fs.readFile(filePath, (err, data) => {
             if (err) {
                 res.writeHead(500);
                 res.end('Error loading index.html');
@@ -17,7 +19,6 @@ http.createServer((req, res) => {
         });
     } else {
         res.writeHead(404);
-        console.log(path.join(__dirname, '..', 'static/index.html'));
         res.end('Not Found');
     }
 }).listen(port, () => {
