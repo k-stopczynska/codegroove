@@ -1,4 +1,6 @@
 import * as vscode from 'vscode';
+import * as cp from 'child_process';
+const path = require('path');
 
 export class Groove {
 	private API_KEY = process.env.YOUTUBE_API_KEY;
@@ -10,8 +12,10 @@ export class Groove {
 		vscode.ViewColumn.One,
 		{
 			enableScripts: true,
+			retainContextWhenHidden: true,
 		},
 	);
+
 	context: vscode.ExtensionContext;
 
 	constructor(context: vscode.ExtensionContext) {
@@ -19,9 +23,22 @@ export class Groove {
 	}
 
 	public async init() {
+		await this.startServer();
 		const searchResult = await this.utubeFetch();
 		const musicHtml = await this.generateYoutubeCharts(searchResult);
 		this.panel.webview.html = musicHtml;
+		this.openSimpleBrowser();
+	}
+
+	private async startServer() {
+		const serverPath = path.join(__dirname, '..', 'static/server.js');
+		let serverProcess: cp.ChildProcess | undefined;
+		if (!serverProcess) {
+			serverProcess = cp.fork(String(serverPath));
+			console.log('Server started on http://localhost:3000');
+		} else {
+			serverProcess.kill();
+		}
 	}
 
 	private async utubeFetch() {
@@ -59,19 +76,45 @@ export class Groove {
 		return fileSrc;
 	}
 
+	private async openSimpleBrowser() {
+		const taskDefinition: vscode.TaskDefinition = {
+			type: 'shell',
+		};
+
+		const taskName = 'simpleBrowser.show';
+		const taskSource = 'Custom Tasks';
+
+		const inputId = 'Simple Browser: Show';
+		const inputCommand = 'simpleBrowser.show';
+		const inputArgs = ['http://localhost:3000'];
+
+		const shellExecution = new vscode.ShellExecution('');
+		const task = new vscode.Task(
+			taskDefinition,
+			vscode.TaskScope.Workspace,
+			taskName,
+			taskSource,
+			shellExecution,
+		);
+
+		await vscode.commands.executeCommand(inputCommand, inputArgs[0]);
+
+		await vscode.tasks.executeTask(task);
+	}
+
 	private async generateYoutubeCharts(data: any) {
 		const logoSrc = this.getFileSrc('assets', 'codegroove.png');
 		const styleSrc = this.getFileSrc('static', 'styles.css');
-		// const chartScriptSrc = this.getFileSrc('static', 'charts.js');
+		// const playerScriptSrc = this.getFileSrc('static', 'player.js');
 
-		const musicContainers = await data.map((vid: any) => {
+		const musicContainers = await data.map((vid: any, index: number) => {
 			const { channelTitle, videoTitle, videoUrl, thumbnail } = vid;
 			return `
 					<div class="chart__container">
 						<h2 class="chart__heading">${videoTitle}</h2>
 						<h3>${channelTitle}</h3>
-						<div class="thumbnail" style="backgroundImage: ${thumbnail}">
-	                        <iframe width="100%" height="100%" src=${videoUrl} frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen sandbox="allow-presentation allow-scripts allow-same-origin"></iframe>
+						<div class="thumbnail" style="background-image: url(${thumbnail})">
+	                        <iframe id=${index} width="100%" height="100%" src=${videoUrl} frameborder="0" allow="presentation; accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
 	                    </div>
 					</div>`;
 		});
@@ -82,19 +125,19 @@ export class Groove {
 	    <head>
 	        <meta charset="UTF-8">
 	        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 	        <link rel="stylesheet" href="${styleSrc}">
 	        <title>play some groove</title>
 	    </head>
-	    <body sandbox="allow-presentation allow-scripts allow-same-origin">
+	    <body>
 	            <nav class="nav__container">
 	                <img src="${logoSrc}" width="100" />
 	                <h1>music</h1>
 	            </nav>
 	        <main>
-	            <section class="section__container" data=${JSON.stringify(
-					data.flat(),
+	            <section class="section__container" 
 				)}>
-	                ${musicContainers.join('')}
+	                 ${musicContainers.join('')}
 	            </section>
 	        </main>
 	    </body>
