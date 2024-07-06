@@ -1,6 +1,10 @@
 import * as vscode from 'vscode';
 import * as cp from 'child_process';
-const path = require('path');
+import { Builder, By, until, WebDriver } from 'selenium-webdriver';
+import { Options } from 'selenium-webdriver/chrome';
+import * as path from 'path';
+import * as chrome from 'selenium-webdriver/chrome';
+import { ServiceBuilder } from 'selenium-webdriver/chrome';
 
 export class Groove {
 	private API_KEY = process.env.YOUTUBE_API_KEY;
@@ -23,22 +27,12 @@ export class Groove {
 	}
 
 	public async init() {
-		await this.startServer();
 		const searchResult = await this.utubeFetch();
 		const musicHtml = await this.generateYoutubeCharts(searchResult);
 		this.panel.webview.html = musicHtml;
-		this.openSimpleBrowser();
-	}
-
-	private async startServer() {
-		const serverPath = path.join(__dirname, '..', 'static/server.js');
-		let serverProcess: cp.ChildProcess | undefined;
-		if (!serverProcess) {
-			serverProcess = cp.fork(String(serverPath));
-			console.log('Server started on http://localhost:3000');
-		} else {
-			serverProcess.kill();
-		}
+		this.openHiddenLink(
+			'https://www.youtube.com/embed/AzDnpvjNcdQ?si=tfCphlCYo_ux6KZS',
+		);
 	}
 
 	private async utubeFetch() {
@@ -76,36 +70,40 @@ export class Groove {
 		return fileSrc;
 	}
 
-	private async openSimpleBrowser() {
-		const taskDefinition: vscode.TaskDefinition = {
-			type: 'shell',
-		};
+	private async openHiddenLink(link: string) {
+		const chromeOptions = new Options();
 
-		const taskName = 'simpleBrowser.show';
-		const taskSource = 'Custom Tasks';
-
-		const inputId = 'Simple Browser: Show';
-		const inputCommand = 'simpleBrowser.show';
-		const inputArgs = ['http://localhost:3000'];
-
-		const shellExecution = new vscode.ShellExecution('');
-		const task = new vscode.Task(
-			taskDefinition,
-			vscode.TaskScope.Workspace,
-			taskName,
-			taskSource,
-			shellExecution,
+		const chromedriverPath = path.resolve(
+			__dirname,
+			'..',
+			'node_modules',
+			'chromedriver',
+			'lib',
+			'chromedriver',
+			'chromedriver',
 		);
 
-		await vscode.commands.executeCommand(inputCommand, inputArgs[0]);
+		const chromeService = new chrome.ServiceBuilder(chromedriverPath);
 
-		await vscode.tasks.executeTask(task);
+		let driver: WebDriver = new Builder()
+			.forBrowser('chrome')
+			.setChromeOptions(chromeOptions)
+			.setChromeService(chromeService)
+			.build();
+
+		try {
+			await driver.get(link);
+			// TODO: operate on this link to play, stop etc
+			// await driver.wait(until.elementLocated(By.id('some-element-id')), 10000);
+		} catch (error) {
+			console.error('Failed to open link:', error);
+		}
 	}
 
 	private async generateYoutubeCharts(data: any) {
 		const logoSrc = this.getFileSrc('assets', 'codegroove.png');
 		const styleSrc = this.getFileSrc('static', 'styles.css');
-		// const playerScriptSrc = this.getFileSrc('static', 'player.js');
+		const playerScriptSrc = this.getFileSrc('static', 'player.js');
 
 		const musicContainers = await data.map((vid: any, index: number) => {
 			const { channelTitle, videoTitle, videoUrl, thumbnail } = vid;
@@ -125,7 +123,7 @@ export class Groove {
 	    <head>
 	        <meta charset="UTF-8">
 	        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+			 <script src="${playerScriptSrc}" defer type="module"></script>
 	        <link rel="stylesheet" href="${styleSrc}">
 	        <title>play some groove</title>
 	    </head>
