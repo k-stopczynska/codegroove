@@ -24,15 +24,16 @@ export class Groove {
 
 	constructor(context: vscode.ExtensionContext) {
 		this.context = context;
+		this.panel.webview.onDidReceiveMessage(this.handleMessage.bind(this));
 	}
 
 	public async init() {
 		const searchResult = await this.utubeFetch();
 		const musicHtml = await this.generateYoutubeCharts(searchResult);
 		this.panel.webview.html = musicHtml;
-		this.openHiddenLink(
-			'https://www.youtube.com/embed/AzDnpvjNcdQ?si=tfCphlCYo_ux6KZS',
-		);
+		// this.openHiddenLink(
+		// 	'https://www.youtube.com/embed/AzDnpvjNcdQ?si=tfCphlCYo_ux6KZS',
+		// );
 	}
 
 	private async utubeFetch() {
@@ -68,6 +69,14 @@ export class Groove {
 		);
 		const fileSrc = this.panel.webview.asWebviewUri(path);
 		return fileSrc;
+	}
+
+	private handleMessage(message: any) {
+		switch (message.command) {
+			case 'openLink':
+				this.openHiddenLink(message.videoUrl);
+				break;
+		}
 	}
 
 	private async openHiddenLink(link: string) {
@@ -111,8 +120,8 @@ export class Groove {
 					<div class="chart__container">
 						<h2 class="chart__heading">${videoTitle}</h2>
 						<h3>${channelTitle}</h3>
-						<div class="thumbnail" style="background-image: url(${thumbnail})">
-	                        <iframe id=${index} width="100%" height="100%" src=${videoUrl} frameborder="0" allow="presentation; accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+						<div class="thumbnail player"  id=${index} src=${videoUrl} style="background-image: url(${thumbnail}); width: 300px; height: 200px">
+	                   
 	                    </div>
 					</div>`;
 		});
