@@ -103,7 +103,11 @@ export class Groove {
 		try {
 			await driver.get(link);
 			// TODO: operate on this link to play, stop etc
-			// await driver.wait(until.elementLocated(By.id('some-element-id')), 10000);
+			const playButton = await driver.wait(
+				until.elementLocated(By.className('ytp-large-play-button')),
+				1000,
+			);
+			playButton.click();
 		} catch (error) {
 			console.error('Failed to open link:', error);
 		}
