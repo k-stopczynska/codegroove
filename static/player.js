@@ -3,12 +3,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const iframes = document.querySelectorAll('.player');
 
     iframes.forEach((iframe) => {
-        iframe.addEventListener('click', (event) => {
+        const handlePlayOnLoad = (event) => {
             const videoUrl = iframe.getAttribute('src');
             vscode.postMessage({ command: 'openLink', videoUrl });
+            
+            const largePlayButton = iframe.querySelector('.ytp-large-play-button');
+            largePlayButton.style.display = 'none';
 
-            const playButton = iframe.querySelector('.ytp-large-play-button');
-            playButton.style.display = 'none';
+            iframe.removeEventListener('click', handlePlayOnLoad);
+
+            const playButton = iframe.querySelector('.ytp-play-button');
+            playButton.addEventListener('click', () => console.log('play button clicked'));
+
+            const muteButton = iframe.querySelector('.ytp-mute-button');
+            muteButton.addEventListener('click', () => console.log('mute button clicked'));
+        }
+        iframe.addEventListener('click', handlePlayOnLoad);
         });
     });
-});
+
