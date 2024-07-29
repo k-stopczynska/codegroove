@@ -9,6 +9,7 @@ import { ServiceBuilder } from 'selenium-webdriver/chrome';
 export class Groove {
 	private API_KEY = process.env.YOUTUBE_API_KEY;
 	private BASE_URI = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=focus&key=${this.API_KEY}`;
+	private driver: any;
 
 	panel = vscode.window.createWebviewPanel(
 		'groove',
@@ -31,9 +32,6 @@ export class Groove {
 		const searchResult = await this.utubeFetch();
 		const musicHtml = await this.generateYoutubeCharts(searchResult);
 		this.panel.webview.html = musicHtml;
-		// this.openHiddenLink(
-		// 	'https://www.youtube.com/embed/AzDnpvjNcdQ?si=tfCphlCYo_ux6KZS',
-		// );
 	}
 
 	private async utubeFetch() {
@@ -54,7 +52,6 @@ export class Groove {
 					thumbnail,
 				});
 			}
-			console.log(searchResult);
 			return searchResult;
 		} catch (er: any) {
 			console.error(er.message);
@@ -72,14 +69,24 @@ export class Groove {
 	}
 
 	private handleMessage(message: any) {
+		if (this.driver === undefined || this.driver === null) {
+			console.log('creating new driver instance');
+			this.driver = this.getWebDriver();
+		}
+
 		switch (message.command) {
 			case 'openLink':
-				this.openHiddenLink(message.videoUrl);
+				this.openHiddenLink(message.videoUrl, this.driver);
 				break;
+			case 'togglePlay':
+				this.togglePlay(this.driver);
+				break;
+			case 'toggleMute':
+				this.toggleMute(this.driver);
 		}
 	}
 
-	private async openHiddenLink(link: string) {
+	private getWebDriver() {
 		const chromeOptions = new Options();
 
 		const chromedriverPath = path.resolve(
@@ -99,6 +106,29 @@ export class Groove {
 			.setChromeOptions(chromeOptions)
 			.setChromeService(chromeService)
 			.build();
+		return driver;
+	}
+
+	private async openHiddenLink(link: string, driver: WebDriver) {
+		// const chromeOptions = new Options();
+
+		// const chromedriverPath = path.resolve(
+		// 	__dirname,
+		// 	'..',
+		// 	'node_modules',
+		// 	'chromedriver',
+		// 	'lib',
+		// 	'chromedriver',
+		// 	'chromedriver',
+		// );
+
+		// const chromeService = new chrome.ServiceBuilder(chromedriverPath);
+
+		// let driver: WebDriver = new Builder()
+		// 	.forBrowser('chrome')
+		// 	.setChromeOptions(chromeOptions)
+		// 	.setChromeService(chromeService)
+		// 	.build();
 
 		try {
 			await driver.get(link);
@@ -108,10 +138,17 @@ export class Groove {
 				1000,
 			);
 			largePlayButton.click();
-
 		} catch (error) {
 			console.error('Failed to open link:', error);
 		}
+	}
+
+	private togglePlay(driver: WebDriver) {
+		console.log('toggle play');
+	}
+
+	private toggleMute(driver: WebDriver) {
+		console.log('toggle mute');
 	}
 
 	private async generateYoutubeCharts(data: any) {

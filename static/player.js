@@ -6,17 +6,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const handlePlayOnLoad = (event) => {
             const videoUrl = iframe.getAttribute('src');
             vscode.postMessage({ command: 'openLink', videoUrl });
-            
+
             const largePlayButton = iframe.querySelector('.ytp-large-play-button');
             largePlayButton.style.display = 'none';
 
             iframe.removeEventListener('click', handlePlayOnLoad);
 
             const playButton = iframe.querySelector('.ytp-play-button');
-            playButton.addEventListener('click', () => console.log('play button clicked'));
+            playButton.addEventListener('click', () => vscode.postMessage({ command: 'togglePlay'}));
 
             const muteButton = iframe.querySelector('.ytp-mute-button');
-            muteButton.addEventListener('click', () => console.log('mute button clicked'));
+            muteButton.addEventListener('click', () => vscode.postMessage({ command: 'toggleMute'}));
         }
         iframe.addEventListener('click', handlePlayOnLoad);
         });
