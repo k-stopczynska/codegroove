@@ -110,29 +110,9 @@ export class Groove {
 	}
 
 	private async openHiddenLink(link: string, driver: WebDriver) {
-		// const chromeOptions = new Options();
-
-		// const chromedriverPath = path.resolve(
-		// 	__dirname,
-		// 	'..',
-		// 	'node_modules',
-		// 	'chromedriver',
-		// 	'lib',
-		// 	'chromedriver',
-		// 	'chromedriver',
-		// );
-
-		// const chromeService = new chrome.ServiceBuilder(chromedriverPath);
-
-		// let driver: WebDriver = new Builder()
-		// 	.forBrowser('chrome')
-		// 	.setChromeOptions(chromeOptions)
-		// 	.setChromeService(chromeService)
-		// 	.build();
-
 		try {
 			await driver.get(link);
-			// TODO: operate on this link to play, stop etc
+
 			const largePlayButton = await driver.wait(
 				until.elementLocated(By.className('ytp-large-play-button')),
 				1000,
@@ -143,12 +123,20 @@ export class Groove {
 		}
 	}
 
-	private togglePlay(driver: WebDriver) {
-		console.log('toggle play');
+	private async togglePlay(driver: WebDriver) {
+		const playButton = await driver.wait(
+			until.elementLocated(By.className('ytp-play-button')),
+			1000,
+		);
+		playButton.click();
 	}
 
-	private toggleMute(driver: WebDriver) {
-		console.log('toggle mute');
+	private async toggleMute(driver: WebDriver) {
+		const muteButton = await driver.wait(
+			until.elementLocated(By.className('ytp-mute-button')),
+			1000,
+		);
+		muteButton.click();
 	}
 
 	private async generateYoutubeCharts(data: any) {
