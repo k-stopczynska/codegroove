@@ -156,3 +156,7 @@ body.vscode-high-contrast .vscode-dark {
 	bottom: 0;
 	justify-content: space-between;
 }
+
+.hidden {
+	display: none;
+}
