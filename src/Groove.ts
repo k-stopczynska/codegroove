@@ -66,26 +66,25 @@ export class Groove {
 			const response = await fetch(videoUrl);
 			const video: any = await response.json();
 			const videoDuration = video.items[0].contentDetails.duration;
-			return videoDuration;
+			return this.parseISODuration(videoDuration);
 		} catch (err: any) {
 			console.error(err);
 		}
 	}
 
 	private parseISODuration(duration: string) {
-    const regex = /P(?:(\d+)Y)?(?:(\d+)M)?(?:(\d+)W)?(?:(\d+)D)?T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/;
-    const matches: any = duration.match(regex);
+		const regex =
+			/P(?:(\d+)Y)?(?:(\d+)M)?(?:(\d+)W)?(?:(\d+)D)?T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/;
+		const matches: any = duration.match(regex);
 
-    return {
-        years: matches[1] ? parseInt(matches[1]) : 0,
-        months: matches[2] ? parseInt(matches[2]) : 0,
-        weeks: matches[3] ? parseInt(matches[3]) : 0,
-        days: matches[4] ? parseInt(matches[4]) : 0,
-        hours: matches[5] ? parseInt(matches[5]) : 0,
-        minutes: matches[6] ? parseInt(matches[6]) : 0,
-        seconds: matches[7] ? parseInt(matches[7]) : 0,
-    };
-}
+		// Don't think there are music videos longer than a day, solution for simplicity
+		const hours = matches[5] ? parseInt(matches[5]) : 0;
+		const minutes = matches[6] ? parseInt(matches[6]) : 0;
+		const seconds = matches[7] ? parseInt(matches[7]) : 0;
+		const totalSeconds = seconds + minutes * 60 + hours * 360;
+		
+		return { totalSeconds, hours, minutes, seconds };
+	}
 
 	private getFileSrc(pathDir: string, pathFile: string): vscode.Uri {
 		const path = vscode.Uri.joinPath(
