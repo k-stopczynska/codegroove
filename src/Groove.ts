@@ -44,11 +44,13 @@ export class Groove {
 				const channelTitle = vid.snippet.channelTitle;
 				const videoTitle = vid.snippet.title;
 				const videoUrl = `https://www.youtube.com/embed/${vid.id.videoId}`;
+				const videoDuration = this.fetchVideoDetails(vid.id.videoId);
 				const thumbnail = vid.snippet.thumbnails.default.url;
 				searchResult.push({
 					channelTitle,
 					videoTitle,
 					videoUrl,
+					videoDuration,
 					thumbnail,
 				});
 			}
@@ -57,6 +59,33 @@ export class Groove {
 			console.error(er.message);
 		}
 	}
+
+	private async fetchVideoDetails(videoId: string) {
+		const videoUrl = `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${videoId}&key=${this.API_KEY}`;
+		try {
+			const response = await fetch(videoUrl);
+			const video: any = await response.json();
+			const videoDuration = video.items[0].contentDetails.duration;
+			return videoDuration;
+		} catch (err: any) {
+			console.error(err);
+		}
+	}
+
+	private parseISODuration(duration: string) {
+    const regex = /P(?:(\d+)Y)?(?:(\d+)M)?(?:(\d+)W)?(?:(\d+)D)?T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/;
+    const matches: any = duration.match(regex);
+
+    return {
+        years: matches[1] ? parseInt(matches[1]) : 0,
+        months: matches[2] ? parseInt(matches[2]) : 0,
+        weeks: matches[3] ? parseInt(matches[3]) : 0,
+        days: matches[4] ? parseInt(matches[4]) : 0,
+        hours: matches[5] ? parseInt(matches[5]) : 0,
+        minutes: matches[6] ? parseInt(matches[6]) : 0,
+        seconds: matches[7] ? parseInt(matches[7]) : 0,
+    };
+}
 
 	private getFileSrc(pathDir: string, pathFile: string): vscode.Uri {
 		const path = vscode.Uri.joinPath(
