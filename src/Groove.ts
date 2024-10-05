@@ -86,16 +86,16 @@ export class Groove {
 	/**
 	 * Parse an ISO 8601 duration string and return an object with the total seconds, hours, minutes and seconds.
 	 * @param {string} duration - The ISO 8601 duration string to parse.
-	 * @returns {{ totalSeconds: number, hours: number, minutes: number, seconds: number }}
+	 * @returns {{ totalSeconds: number, hours: string, minutes: string, seconds: string }}
 	 */
 	private parseISODuration(duration: string): {
 		totalSeconds: number;
-		hours: number;
-		minutes: number;
-		seconds: number;
+		hours: string;
+		minutes: string;
+		seconds: string;
 	} {
 		if (!duration) {
-			return { totalSeconds: 0, hours: 0, minutes: 0, seconds: 0 };
+			return { totalSeconds: 0, hours: "00", minutes: "00", seconds: "00" };
 		}
 		const regex =
 			/P(?:(\d+)Y)?(?:(\d+)M)?(?:(\d+)W)?(?:(\d+)D)?T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/;
@@ -107,7 +107,7 @@ export class Groove {
 		const seconds = matches?.[7] ? parseInt(matches[7], 10) : 0;
 		const totalSeconds = seconds + minutes * 60 + hours * 360;
 
-		return { totalSeconds, hours, minutes, seconds };
+		return { totalSeconds, hours: String(hours).padStart(2, '0'), minutes: String(minutes).padStart(2, '0'), seconds: String(seconds).padStart(2, '0')};
 	}
 
 	private getFileSrc(pathDir: string, pathFile: string): vscode.Uri {
