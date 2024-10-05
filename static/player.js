@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
             vscode.postMessage({ command: 'openLink', videoUrl });
 
             const largePlayButton = iframe.querySelector('.ytp-large-play-button');
+            const largeButtonInactive = document.querySelector('.ytp-large-play-button.hidden');
+            if (largeButtonInactive) largeButtonInactive.classList.remove('hidden');
             largePlayButton.classList.toggle('hidden');
 
             iframe.removeEventListener('click', handlePlayOnLoad);
