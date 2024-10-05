@@ -90,7 +90,7 @@
 		"@vscode/test-cli": "^0.0.4",
 		"@vscode/test-electron": "^2.3.8",
 		"chai": "4.1.0",
-		"chromedriver": "^126.0.4",
+		"chromedriver": "^126.0.5",
 		"eslint": "^8.56.0",
 		"jsdom": "^24.0.0",
 		"selenium-webdriver": "^4.22.0",

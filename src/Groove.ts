@@ -26,6 +26,7 @@ export class Groove {
 	constructor(context: vscode.ExtensionContext) {
 		this.context = context;
 		this.panel.webview.onDidReceiveMessage(this.handleMessage.bind(this));
+		this.driver = this.getWebDriver();
 	}
 
 	public async init() {
@@ -44,7 +45,9 @@ export class Groove {
 				const channelTitle = vid.snippet.channelTitle;
 				const videoTitle = vid.snippet.title;
 				const videoUrl = `https://www.youtube.com/embed/${vid.id.videoId}`;
-				const videoDuration = this.fetchVideoDetails(vid.id.videoId);
+				const videoDuration = await this.fetchVideoDetails(
+					vid.id.videoId,
+				);
 				const thumbnail = vid.snippet.thumbnails.default.url;
 				searchResult.push({
 					channelTitle,
@@ -65,24 +68,45 @@ export class Groove {
 		try {
 			const response = await fetch(videoUrl);
 			const video: any = await response.json();
+
+			if (
+				!video.items ||
+				!video.items[0] ||
+				!video.items[0].contentDetails
+			) {
+				return this.parseISODuration("PT00H00M00S");
+			}
 			const videoDuration = video.items[0].contentDetails.duration;
-			return this.parseISODuration(videoDuration);
+			if(videoDuration) return this.parseISODuration(videoDuration);
 		} catch (err: any) {
 			console.error(err);
 		}
 	}
 
-	private parseISODuration(duration: string) {
+	/**
+	 * Parse an ISO 8601 duration string and return an object with the total seconds, hours, minutes and seconds.
+	 * @param {string} duration - The ISO 8601 duration string to parse.
+	 * @returns {{ totalSeconds: number, hours: number, minutes: number, seconds: number }}
+	 */
+	private parseISODuration(duration: string): {
+		totalSeconds: number;
+		hours: number;
+		minutes: number;
+		seconds: number;
+	} {
+		if (!duration) {
+			return { totalSeconds: 0, hours: 0, minutes: 0, seconds: 0 };
+		}
 		const regex =
 			/P(?:(\d+)Y)?(?:(\d+)M)?(?:(\d+)W)?(?:(\d+)D)?T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/;
-		const matches: any = duration.match(regex);
+		const matches: RegExpMatchArray | null = duration.match(regex);
 
 		// Don't think there are music videos longer than a day, solution for simplicity
-		const hours = matches[5] ? parseInt(matches[5]) : 0;
-		const minutes = matches[6] ? parseInt(matches[6]) : 0;
-		const seconds = matches[7] ? parseInt(matches[7]) : 0;
+		const hours = matches?.[5] ? parseInt(matches[5], 10) : 0;
+		const minutes = matches?.[6] ? parseInt(matches[6], 10) : 0;
+		const seconds = matches?.[7] ? parseInt(matches[7], 10) : 0;
 		const totalSeconds = seconds + minutes * 60 + hours * 360;
-		
+
 		return { totalSeconds, hours, minutes, seconds };
 	}
 
@@ -97,7 +121,7 @@ export class Groove {
 	}
 
 	private handleMessage(message: any) {
-		if (this.driver === undefined || this.driver === null) {
+		if (! this.driver) {
 			this.driver = this.getWebDriver();
 		}
 
@@ -115,6 +139,7 @@ export class Groove {
 
 	private getWebDriver() {
 		const chromeOptions = new Options();
+		//TODO: add arguments so the browser can be run in headless mode
 		// chromeOptions.addArguments('--headless');
 		// chromeOptions.addArguments('--disable-gpu');
 		// chromeOptions.addArguments('--no-sandbox');
@@ -175,7 +200,14 @@ export class Groove {
 		const playerScriptSrc = this.getFileSrc('static', 'player.js');
 
 		const musicContainers = await data.map((vid: any, index: number) => {
-			const { channelTitle, videoTitle, videoUrl, thumbnail } = vid;
+			const {
+				channelTitle,
+				videoTitle,
+				videoUrl,
+				videoDuration,
+				thumbnail,
+			} = vid;
+
 			return `
 					<div class="chart__container">
 						<div class="thumbnail player"  id=${index} src=${videoUrl} style="background-image: url(${thumbnail})">
@@ -204,6 +236,7 @@ export class Groove {
                 							<path class="ytp-svg-fill ytp-svg-volume-animation-speaker" clip-path="url(#ytp-svg-volume-animation-mask)" d="M8,21 L12,21 L17,26 L17,10 L12,15 L8,15 L8,21 Z M19,14 L19,22 C20.48,21.32 21.5,19.77 21.5,18 C21.5,16.26 20.48,14.74 19,14 ZM19,11.29 C21.89,12.15 24,14.83 24,18 C24,21.17 21.89,23.85 19,24.71 L19,26.77 C23.01,25.86 26,22.28 26,18 C26,13.72 23.01,10.14 19,9.23 L19,11.29 Z M 9.25,9 7.98,10.27 24.71,27 l 1.27,-1.27 Z" fill="#fff"></path>
             							</svg>
         							</button>
+								<p>${videoDuration.hours}:${videoDuration.minutes}:${videoDuration.seconds}<p>
 					   			</div>
 					   			<h3 class="channel__heading">${channelTitle}</h3>
 	                    	</div>
