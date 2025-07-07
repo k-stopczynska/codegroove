@@ -44,6 +44,7 @@
 		],
 		"configuration": {
 			"title": "codegroove",
+			"chromedriver_force_download": "true",
 			"properties": {
 				"codegroove.inactivityThreshold": {
 					"type": "number",
@@ -90,7 +91,6 @@
 		"@vscode/test-cli": "^0.0.4",
 		"@vscode/test-electron": "^2.3.8",
 		"chai": "4.1.0",
-		"chromedriver": "^126.0.5",
 		"eslint": "^8.56.0",
 		"jsdom": "^24.0.0",
 		"selenium-webdriver": "^4.22.0",
@@ -103,6 +103,7 @@
 	},
 	"dependencies": {
 		"chart.js": "^4.4.1",
+		"chromedriver": "^137.0.1",
 		"csv-parser": "^3.0.0",
 		"dotenv": "^16.4.5",
 		"dotenv-webpack": "^8.1.0",
