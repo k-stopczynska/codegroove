@@ -260,6 +260,8 @@ export class Groove {
 	                <h1>music</h1>
 	            </nav>
 	        <main>
+				<input type="text" id="searchBox" placeholder="Search..." />
+				<button id="searchBtn">Search</button>
 	            <section class="section__container" 
 				)}>
 	                 ${musicContainers.join('')}
